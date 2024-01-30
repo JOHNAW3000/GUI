@@ -36,44 +36,16 @@ namespace GUI
 
             }
 
-
-            // Calculates the forces between objects
-            forces.Update();
-
-            // Still in progress
             CoordinateConverter coords = new CoordinateConverter(1000,1000);
             coords.ConvertCoords(forces);
 
-            Console.WriteLine("Coordinates");
-            coords.Data();
+
 
             Graphics g = this.CreateGraphics();
 
-            Pen p = new Pen(Color.OrangeRed, 5);
-            Brush b = new SolidBrush(Color.Yellow);
-            int size = 20;
+            SystemSimulation sim = new SystemSimulation(forces, coords);
+            sim.Run(3600, 1000, g);
 
-
-
-            for (int i = 0; i < coords.Coords.Count; i++)
-            {
-                Vector pos = coords.Coords[i];
-                if (pos.X == 500 && pos.Y == 500)
-                {
-                    p = new Pen(Color.OrangeRed, 5);
-                    b = new SolidBrush(Color.Yellow);
-                    size = 20;
-                }
-                else
-                {
-                    p = new Pen(Color.DarkGray, 5);
-                    b = new SolidBrush(Color.Gray);
-                    size = 10;
-
-                }
-                g.FillEllipse(b, (float)pos.X, (float)pos.Y, size, size);
-                g.DrawEllipse(p, (float)pos.X, (float)pos.Y, size, size);
-            }
 
 
         }

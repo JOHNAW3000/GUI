@@ -42,6 +42,12 @@
             set { position = value; }
         }
 
+        public Vector Velocity
+        {
+            get { return velocity; }
+            set { velocity = value; }
+        }
+
         public void Data()
         {
             Console.WriteLine($"Name: {this.name}");

@@ -83,7 +83,7 @@
 
             }
 
-            public Vector resultant(int index)
+            public Vector Resultant(int index)
             {
                 Vector resultantforce = new Vector(0, 0);
                 foreach (Vector f in edges[index])
@@ -113,7 +113,7 @@
 
                     }
                     Console.WriteLine($"Resultant force on {a.Name} is:");
-                    this.resultant(i).Data();
+                    this.Resultant(i).Data();
                 }
             }
 
