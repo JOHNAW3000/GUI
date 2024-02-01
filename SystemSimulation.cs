@@ -35,6 +35,12 @@ namespace GUI
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
+                        //
+                        Body test = bodies[bodyindex];
+
+                        Debug.WriteLine($"Position of {test.Name}");
+                        test.Position.Data();
+                        //
                         Vector pos = coordinates[bodyindex];
                         Colours colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
                         Pen p = colours.getOutline();
@@ -46,7 +52,7 @@ namespace GUI
 
                     this.Step(timestep);
 
-                    Thread.Sleep(100);
+                    Thread.Sleep(5);
                 }
             }
 
@@ -67,6 +73,12 @@ namespace GUI
                     Vector resultant = PlanetarySystem.Resultant(i);
 
                     Vector acceleration = resultant.Scale(1 / mass);
+                    if (acceleration.Modulus() < 0.01)
+                    {
+                        acceleration = new Vector(0, 0);
+                    }
+                    Debug.WriteLine($"Acceleration of {body.Name}");
+                    acceleration.Data();
 
                     Vector position = body.Position;
 
@@ -75,24 +87,18 @@ namespace GUI
                     Vector velocity = body.Velocity;
 
                     // Calculate new position
-                    double Half_t_squared = 0.5 * (timestep * timestep);
-                    Vector newpos = position.Add(velocity.Scale(timestep).Add(acceleration.Scale(Half_t_squared)));
-                    body.PreviousPosition = position;
-                    body.Position = newpos;
+                    Vector newpos = deltaPosition(position, velocity, acceleration, timestep);
+                    Debug.WriteLine($"Change in pos:");
+                    position.VectorTo(newpos).Data();
+
 
                     // Calculate new velocity
 
                     // 1/timestep
+                    double timestepreciprocal = 1.0 / timestep;
 
-                    // Somethig broken here!!! 
-
-                    double timestepreciprocal = 1 / timestep;
-                    Debug.WriteLine(timestepreciprocal);
-
-
-                    Vector newvelocity = (lastpos.VectorTo(position)).Scale(timestepreciprocal);
-
-                    
+                    Vector newvelocity = newpos.VectorTo(position);
+                    newvelocity.Scale(timestepreciprocal);
 
                     //Vector newvelocity = velocity.Add(acceleration.Scale(timestep));
 
@@ -103,12 +109,29 @@ namespace GUI
                     Debug.WriteLine($"newVelocity of {body.Name}");
                     body.Velocity.Data();
 
+                    body.Position = newpos;
+
                     PlanetarySystem.ReplaceBody(body, i);
                 }
 
                 //PlanetarySystem.Data();
                 converter.ConvertCoords(PlanetarySystem);
                 
+            }
+
+            private static Vector deltaPosition(Vector position, Vector velocity, Vector acceleration, double timestep)
+            {
+                // fix this
+
+                Vector displacement = velocity.Scale(timestep);
+
+                Vector AccTimeSquared = acceleration.Scale(0.5 * timestep * timestep);
+
+                Vector newpos = position.Add(displacement);
+                newpos.Add(AccTimeSquared);
+                    
+
+                return newpos;
             }
 
 

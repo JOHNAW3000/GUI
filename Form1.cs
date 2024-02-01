@@ -52,11 +52,7 @@ namespace GUI
 
             }
 
-
-
-
             CoordinateConverter coords = new CoordinateConverter(1000, 1000);
-            coords.ConvertCoords(forces);
 
 
 
@@ -64,7 +60,7 @@ namespace GUI
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(3600, 1000, g);
+            sim.Run(3600 * 24 * 10, 100, g);
 
 
 

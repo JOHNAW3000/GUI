@@ -26,11 +26,12 @@ namespace GUI
             // Outputs coordinate list
             public List<Vector> ConvertCoords(AdjacencyMatrix planets)
             {
+                Debug.WriteLine("Converting coords");
 
-            List<Vector> coords = new List<Vector>();
+                List<Vector> coords = new List<Vector>();
 
 
-            Vector centre = new Vector(this.width / 2, this.height / 2);
+                Vector centre = new Vector(this.width / 2, this.height / 2);
 
                 List<Body> bodies = planets.GetBodies();
                 //this.Coords = new List<Vector>(bodies.Count());
@@ -40,16 +41,22 @@ namespace GUI
                 for (int i = 0; i < bodies.Count; i++)
                 {
                     Body b = bodies[i];
+                    Debug.WriteLine(b.Name);
                     Vector bpos = b.Position;
                     if (bpos.X == 0 && bpos.Y == 0)
                     {
+                        Debug.WriteLine($"Coords of {b.Name}:");
+                        bpos.Add(centre).Data();
                         coords.Add(bpos.Add(centre));
                     }
                     else
                     {
                         //Vector bcoords = bpos.Log(logbase);
                         Vector bcoords = bpos.Scale(0.000001);
-                        coords.Add( bcoords.Add(centre));
+                        Debug.WriteLine($"Coords of {b.Name}:");
+                        bcoords = bcoords.Add(centre);
+                        bcoords.Data();
+                        coords.Add(bcoords);
                     }
                 }
 
