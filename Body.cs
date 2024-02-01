@@ -9,8 +9,11 @@
         private double mass;
         private double radius;
         private Vector position;
+        private Vector previous_position;
         private Vector velocity;
         private string stats;
+        private Colours colours;
+
 
         // Constructor
 
@@ -22,9 +25,17 @@
             this.radius = radius;
             this.position = position;
             this.velocity = velocity;
+            this.previous_position = new Vector(0, 0);
         }
 
         // Methods
+
+
+        public Colours Colours
+        {
+            get { return colours; }
+            set { colours = value; }
+        }
         public string Name
         {
             get { return name; }
@@ -46,6 +57,12 @@
         {
             get { return velocity; }
             set { velocity = value; }
+        }
+
+        public Vector PreviousPosition
+        {
+            get { return previous_position; }
+            set { previous_position = value; }
         }
 
         public void Data()

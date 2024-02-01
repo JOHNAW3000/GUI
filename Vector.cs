@@ -1,4 +1,6 @@
-﻿namespace GUI
+﻿using System.Diagnostics;
+
+namespace GUI
 {
     public class Vector
     {
@@ -69,9 +71,9 @@
         public void Data()
         {
             double mod = this.Modulus();
-            Console.WriteLine($"X: {this.X}");
-            Console.WriteLine($"Y: {this.Y}");
-            Console.WriteLine($"Mod: {mod}");
+            Debug.WriteLine($"X: {this.X}");
+            Debug.WriteLine($"Y: {this.Y}");
+            //Debug.WriteLine($"Mod: {mod}");
         }
 
 

@@ -1,17 +1,19 @@
-﻿namespace GUI
+﻿using System.Diagnostics;
+
+namespace GUI
 {
     internal partial class Program
     {
         public class SystemSimulation
         {
             // Properties
-            AdjacencyMatrix forces;
+            AdjacencyMatrix PlanetarySystem;
             CoordinateConverter converter;
 
             // Constructor
             public SystemSimulation(AdjacencyMatrix forces, CoordinateConverter converter)
             {
-                this.forces = forces;
+                this.PlanetarySystem = forces;
                 this.converter = converter;
             }
 
@@ -22,69 +24,91 @@
             {
 
 
-                Pen p = new Pen(Color.OrangeRed, 5);
-                Brush b = new SolidBrush(Color.Yellow);
+              
                 int size = 20;
 
                 for (int i = 0; i < length; i++)
                 {
                     // need to invalidate here!!!
-                    this.Step(timestep);
+                    List<Body> bodies = PlanetarySystem.GetBodies();
+                    List<Vector> coordinates = converter.ConvertCoords(PlanetarySystem);
 
-                    for (int j = 0; j < converter.Coords.Count; j++)
+                    for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
-                        Vector pos = converter.Coords[j];
-                        if (pos.X == 500 && pos.Y == 500)
-                        {
-                            p = new Pen(Color.OrangeRed, 5);
-                            b = new SolidBrush(Color.Yellow);
-                            size = 20;
-                        }
-                        else
-                        {
-                            p = new Pen(Color.DarkGray, 5);
-                            b = new SolidBrush(Color.Gray);
-                            size = 10;
-
-                        }
+                        Vector pos = coordinates[bodyindex];
+                        Colours colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
+                        Pen p = colours.getOutline();
+                        Brush b = colours.getFill();
+                        
                         g.FillEllipse(b, (float)pos.X, (float)pos.Y, size, size);
                         g.DrawEllipse(p, (float)pos.X, (float)pos.Y, size, size);
                     }
 
+                    this.Step(timestep);
 
                     Thread.Sleep(100);
                 }
             }
 
 
-            private void Step(int t)
+            private void Step(int timestep)
             {
-                // t is the timestep
-                forces.Update();
-                List<Body> bodies = forces.GetBodies();
+                PlanetarySystem.Update();
+                List<Body> bodies = PlanetarySystem.GetBodies();
+
                 for (int i = 0; i < bodies.Count; i++)
                 {
+
+                    // Now using Verlet method
+
                     Body body = bodies[i];
-                    Vector resultant = forces.Resultant(i);
                     double mass = body.Mass;
+
+                    Vector resultant = PlanetarySystem.Resultant(i);
+
                     Vector acceleration = resultant.Scale(1 / mass);
 
                     Vector position = body.Position;
+
+                    Vector lastpos = body.PreviousPosition;
+
                     Vector velocity = body.Velocity;
 
                     // Calculate new position
-                    double Half_t_squared = 0.5 * (t * t);
-                    Vector newpos = position.Add(velocity.Scale(t).Add(acceleration.Scale(Half_t_squared)));
+                    double Half_t_squared = 0.5 * (timestep * timestep);
+                    Vector newpos = position.Add(velocity.Scale(timestep).Add(acceleration.Scale(Half_t_squared)));
+                    body.PreviousPosition = position;
+                    body.Position = newpos;
 
                     // Calculate new velocity
-                    Vector newvelocity = velocity.Add(acceleration.Scale(t));
 
-                    body.Position = newpos;
+                    // 1/timestep
+
+                    // Somethig broken here!!! 
+
+                    double timestepreciprocal = 1 / timestep;
+                    Debug.WriteLine(timestepreciprocal);
+
+
+                    Vector newvelocity = (lastpos.VectorTo(position)).Scale(timestepreciprocal);
+
+                    
+
+                    //Vector newvelocity = velocity.Add(acceleration.Scale(timestep));
+
+                    Debug.WriteLine($"Velocity of {body.Name}");
+                    body.Velocity.Data();
+
                     body.Velocity = newvelocity;
+                    Debug.WriteLine($"newVelocity of {body.Name}");
+                    body.Velocity.Data();
+
+                    PlanetarySystem.ReplaceBody(body, i);
                 }
 
-                converter.ConvertCoords(forces);
-
+                //PlanetarySystem.Data();
+                converter.ConvertCoords(PlanetarySystem);
+                
             }
 
 

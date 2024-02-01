@@ -1,4 +1,6 @@
-﻿namespace GUI
+﻿using System.Diagnostics;
+
+namespace GUI
 {
     internal static partial class Program
     {
@@ -8,7 +10,6 @@
             int width;
             int height;
             // Stores the coordinates of each planet to be plotted
-            List<Vector> coords = new List<Vector>();
 
 
 
@@ -23,23 +24,22 @@
             // Methods
 
             // Outputs coordinate list
-            public List<Vector> Coords
+            public List<Vector> ConvertCoords(AdjacencyMatrix planets)
             {
-                get { return coords; }
-                set { coords = value; }
-            }
 
-            public void ConvertCoords(AdjacencyMatrix forces)
-            {
-                Vector centre = new Vector(this.width / 2, this.height / 2);
-                
-                List<Body> bodies = forces.GetBodies();
+            List<Vector> coords = new List<Vector>();
 
+
+            Vector centre = new Vector(this.width / 2, this.height / 2);
+
+                List<Body> bodies = planets.GetBodies();
+                //this.Coords = new List<Vector>(bodies.Count());
+               
                 double logbase = 1.1;
 
-                foreach (Body b in bodies)
+                for (int i = 0; i < bodies.Count; i++)
                 {
-                    Console.WriteLine(b.Name);
+                    Body b = bodies[i];
                     Vector bpos = b.Position;
                     if (bpos.X == 0 && bpos.Y == 0)
                     {
@@ -47,22 +47,15 @@
                     }
                     else
                     {
-                        Vector bcoords = bpos.Log(logbase);
-                        coords.Add(bcoords.Add(centre));
+                        //Vector bcoords = bpos.Log(logbase);
+                        Vector bcoords = bpos.Scale(0.000001);
+                        coords.Add( bcoords.Add(centre));
                     }
-
                 }
 
+                return coords;
             }
 
-
-            public void Data()
-            {
-                foreach (Vector v in coords)
-                {
-                    v.Data();
-                }
-            }
         }
     }
 }

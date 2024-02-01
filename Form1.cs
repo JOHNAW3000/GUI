@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using System.Diagnostics;
 using static GUI.Program;
 
 
@@ -11,7 +11,6 @@ namespace GUI
             InitializeComponent();
             this.DoubleBuffered = true;
 
-            
         }
 
 
@@ -21,22 +20,42 @@ namespace GUI
             // Create API and force matrix for the simulation
             HorizonsAPI api = new HorizonsAPI();
             AdjacencyMatrix forces = new AdjacencyMatrix();
-            Console.WriteLine("Creating force matrix");
+            Debug.WriteLine("Creating force matrix");
 
             // Creates a list of planets to loop through
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
+            // string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
+            string[] planets = { "Sun", "Mercury" };
             foreach (string planet in planets)
             {
                 // Creates a body from each API response
                 Body body = api.ParseAPIResponse(planet);
+
+                if (planet == "Sun")
+                {
+                    Pen p = new Pen(Color.OrangeRed);
+                    Brush b = new SolidBrush(Color.Yellow);
+                    Colours sun = new Colours(p, b);
+                    body.Colours = sun;
+                }
+                else
+                {
+                    Pen p = new Pen(Color.Gray);
+                    Brush b = new SolidBrush(Color.DarkGray);
+                    Colours merc = new Colours(p, b);
+                    body.Colours = merc;
+                }
+
                 // Add to force matrix
                 forces.AddBody(body);
 
-                Console.WriteLine($"   - Added {body.Name}");
+                Debug.WriteLine($"   - Added {body.Name}");
 
             }
 
-            CoordinateConverter coords = new CoordinateConverter(1000,1000);
+
+
+
+            CoordinateConverter coords = new CoordinateConverter(1000, 1000);
             coords.ConvertCoords(forces);
 
 
@@ -44,6 +63,7 @@ namespace GUI
             Graphics g = this.CreateGraphics();
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
+
             sim.Run(3600, 1000, g);
 
 

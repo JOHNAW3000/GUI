@@ -1,4 +1,6 @@
-﻿namespace GUI
+﻿using System.Diagnostics;
+
+namespace GUI
 {
     internal partial class Program
     {
@@ -17,7 +19,10 @@
 
             // Methods
 
-
+            public void ReplaceBody(Body body, int index)
+            {
+                this.bodies[index] = body;
+            }
             public List<Body> GetBodies()
             {
                 return this.bodies;
@@ -86,10 +91,12 @@
             public Vector Resultant(int index)
             {
                 Vector resultantforce = new Vector(0, 0);
-                foreach (Vector f in edges[index])
+               
+                foreach (List<Vector> column in edges)
                 {
-                    resultantforce = resultantforce.Add(f);
+                    resultantforce = resultantforce.Add(column[index]);
                 }
+
 
                 return resultantforce;
 
@@ -112,6 +119,7 @@
                         }
 
                     }
+                    //a.Position.Data();
                     Console.WriteLine($"Resultant force on {a.Name} is:");
                     this.Resultant(i).Data();
                 }
