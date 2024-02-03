@@ -72,7 +72,7 @@ namespace GUI
                             double masses = a.Mass * b.Mass;
                             Vector rvector = a.Position.VectorTo(b.Position);
                             double rmod = rvector.Modulus();
-                            Debug.WriteLine($"Distance between {a.Name} and {b.Name} = {rmod}");
+                            //Debug.WriteLine($"Distance between {a.Name} and {b.Name} = {rmod}");
                             double rsquared = Math.Pow(rmod, 2);
                             // Calculate Unit vector of r
                             Vector runit = rvector.Unit();
@@ -98,7 +98,7 @@ namespace GUI
                     resultantforce = resultantforce.Add(column[index]);
                 }
 
-
+                Debug.WriteLine($"Force on {bodies[index].Name}: {resultantforce.Modulus()}");
                 return resultantforce;
 
             }

@@ -9,7 +9,6 @@
         private double mass;
         private double radius;
         private Vector position;
-        private Vector previous_position;
         private Vector velocity;
         private string stats;
         private Colours colours;
@@ -25,7 +24,6 @@
             this.radius = radius;
             this.position = position;
             this.velocity = velocity;
-            this.previous_position = new Vector(0, 0);
         }
 
         // Methods
@@ -59,11 +57,6 @@
             set { velocity = value; }
         }
 
-        public Vector PreviousPosition
-        {
-            get { return previous_position; }
-            set { previous_position = value; }
-        }
 
         public void Data()
         {

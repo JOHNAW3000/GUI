@@ -24,7 +24,7 @@ namespace GUI
             {
 
 
-              
+
                 int size = 20;
 
                 for (int i = 0; i < length; i++)
@@ -45,7 +45,7 @@ namespace GUI
                         Colours colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
                         Pen p = colours.getOutline();
                         Brush b = colours.getFill();
-                        
+
                         g.FillEllipse(b, (float)pos.X, (float)pos.Y, size, size);
                         g.DrawEllipse(p, (float)pos.X, (float)pos.Y, size, size);
                     }
@@ -73,6 +73,7 @@ namespace GUI
                     Vector resultant = PlanetarySystem.Resultant(i);
 
                     Vector acceleration = resultant.Scale(1 / mass);
+                    acceleration = acceleration.Scale(0.001);
                     if (acceleration.Modulus() < 0.01)
                     {
                         acceleration = new Vector(0, 0);
@@ -82,25 +83,26 @@ namespace GUI
 
                     Vector position = body.Position;
 
-                    Vector lastpos = body.PreviousPosition;
 
                     Vector velocity = body.Velocity;
 
                     // Calculate new position
                     Vector newpos = deltaPosition(position, velocity, acceleration, timestep);
-                    Debug.WriteLine($"Change in pos:");
-                    position.VectorTo(newpos).Data();
 
 
                     // Calculate new velocity
 
-                    // 1/timestep
-                    double timestepreciprocal = 1.0 / timestep;
+                    body.Position = newpos;
+                    PlanetarySystem.ReplaceBody(body, i);
+                    PlanetarySystem.Update();
 
-                    Vector newvelocity = newpos.VectorTo(position);
-                    newvelocity.Scale(timestepreciprocal);
+                    resultant = PlanetarySystem.Resultant(i);
+                    Vector newacceleration = resultant.Scale(1 / (mass*1000));
 
-                    //Vector newvelocity = velocity.Add(acceleration.Scale(timestep));
+                    Vector newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
+
+
+                    // Outputs and checks
 
                     Debug.WriteLine($"Velocity of {body.Name}");
                     body.Velocity.Data();
@@ -109,29 +111,63 @@ namespace GUI
                     Debug.WriteLine($"newVelocity of {body.Name}");
                     body.Velocity.Data();
 
-                    body.Position = newpos;
-
                     PlanetarySystem.ReplaceBody(body, i);
                 }
 
                 //PlanetarySystem.Data();
                 converter.ConvertCoords(PlanetarySystem);
-                
+
             }
 
             private static Vector deltaPosition(Vector position, Vector velocity, Vector acceleration, double timestep)
             {
                 // fix this
+                Debug.WriteLine("deltaPosition using pos, vel, acc and t:");
+                position.Data();
+                velocity.Data();
+                acceleration.Data();
+                Debug.WriteLine(timestep);
 
                 Vector displacement = velocity.Scale(timestep);
 
                 Vector AccTimeSquared = acceleration.Scale(0.5 * timestep * timestep);
 
-                Vector newpos = position.Add(displacement);
-                newpos.Add(AccTimeSquared);
-                    
+                Vector deltaP = displacement.Add(AccTimeSquared);
+                Vector newpos = position.Add(deltaP);
 
+                Debug.WriteLine("Pos");
+                position.Data();
+
+                Debug.WriteLine("Newpos");
+                newpos.Data();
+
+               // Debug.WriteLine($"Average speed = {position.VectorTo(newpos).Scale(1 / timestep).Modulus()}");
                 return newpos;
+            }
+
+            private static Vector deltaVelocity(Vector velocity, Vector acceleration, Vector newacceleration, double timestep)
+            {
+                if (newacceleration.Modulus() < 0.01)
+                {
+                    newacceleration = new Vector(0, 0);
+                }
+
+                Debug.WriteLine("Old acc, new acc");
+                acceleration.Data();
+                newacceleration.Data();
+
+                Vector newvelocity = velocity;
+
+                //Debug.WriteLine("Newacc:");
+                //newacceleration.Data();
+
+                acceleration = acceleration.Add(newacceleration);
+                acceleration = acceleration.Scale(0.5 * timestep);
+
+                newvelocity = newvelocity.Add(acceleration);
+                Debug.WriteLine("newvel:");
+                newvelocity.Data();
+                return newvelocity;
             }
 
 

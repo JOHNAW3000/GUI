@@ -54,19 +54,11 @@ namespace GUI
 
             CoordinateConverter coords = new CoordinateConverter(1000, 1000);
 
-
-
             Graphics g = this.CreateGraphics();
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(3600 * 24 * 10, 100, g);
-
-
-
+            sim.Run(60, 60*24, g);
         }
-
-
-
     }
 }
