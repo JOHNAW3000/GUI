@@ -52,7 +52,7 @@ namespace GUI
 
                     this.Step(timestep);
 
-                    Thread.Sleep(5);
+                    //Thread.Sleep(1);
                 }
             }
 

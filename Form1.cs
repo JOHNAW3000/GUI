@@ -58,7 +58,7 @@ namespace GUI
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(60, 60*24, g);
+            sim.Run(60, 60 * 24, g);
         }
     }
 }
