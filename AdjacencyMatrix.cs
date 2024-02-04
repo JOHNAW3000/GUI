@@ -100,7 +100,7 @@ namespace GUI
                     resultantforce = resultantforce.Add(column[index]);
                 }
 
-                Debug.WriteLine($"Force on {bodies[index].Name}: {resultantforce.Modulus()}");
+                //Debug.WriteLine($"Force on {bodies[index].Name}: {resultantforce.Modulus()}");
                 return resultantforce;
 
             }

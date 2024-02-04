@@ -26,7 +26,7 @@ namespace GUI
             // Outputs coordinate list
             public List<Vector> ConvertCoords(AdjacencyMatrix planets)
             {
-                Debug.WriteLine("Converting coords");
+                //Debug.WriteLine("Converting coords");
 
                 List<Vector> coords = new List<Vector>();
 
@@ -45,7 +45,7 @@ namespace GUI
                     Vector bpos = b.Position;
                     if (bpos.X == 0 && bpos.Y == 0)
                     {
-                        Debug.WriteLine($"Coords of {b.Name}:");
+                        //Debug.WriteLine($"Coords of {b.Name}:");
                         bpos.Add(centre).Data();
                         coords.Add(bpos.Add(centre));
                     }
@@ -53,7 +53,7 @@ namespace GUI
                     {
                         //Vector bcoords = bpos.Log(logbase);
                         Vector bcoords = bpos.Scale(0.000001);
-                        Debug.WriteLine($"Coords of {b.Name}:");
+                        //Debug.WriteLine($"Coords of {b.Name}:");
                         bcoords = bcoords.Add(centre);
                         bcoords.Data();
                         coords.Add(bcoords);

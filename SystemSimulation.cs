@@ -73,10 +73,7 @@ namespace GUI
                     Vector resultant = PlanetarySystem.Resultant(i);
 
                     Vector acceleration = resultant.Scale(1 / mass);
-                    if (acceleration.Modulus() < 0.01)
-                    {
-                        acceleration = new Vector(0, 0);
-                    }
+                   
                     Debug.WriteLine($"Acceleration of {body.Name}");
                     acceleration.Data();
 
@@ -147,10 +144,6 @@ namespace GUI
 
             private static Vector deltaVelocity(Vector velocity, Vector acceleration, Vector newacceleration, double timestep)
             {
-                if (newacceleration.Modulus() < 0.01)
-                {
-                    newacceleration = new Vector(0, 0);
-                }
 
                 Debug.WriteLine("Old acc, new acc");
                 acceleration.Data();
