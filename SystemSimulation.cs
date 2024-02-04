@@ -73,7 +73,6 @@ namespace GUI
                     Vector resultant = PlanetarySystem.Resultant(i);
 
                     Vector acceleration = resultant.Scale(1 / mass);
-                    acceleration = acceleration.Scale(0.001);
                     if (acceleration.Modulus() < 0.01)
                     {
                         acceleration = new Vector(0, 0);
@@ -82,13 +81,14 @@ namespace GUI
                     acceleration.Data();
 
                     Vector position = body.Position;
-
+                    position = position.Scale(1000);
 
                     Vector velocity = body.Velocity;
+                    velocity = velocity.Scale(1000);
+
 
                     // Calculate new position
                     Vector newpos = deltaPosition(position, velocity, acceleration, timestep);
-
 
                     // Calculate new velocity
 
@@ -97,7 +97,7 @@ namespace GUI
                     PlanetarySystem.Update();
 
                     resultant = PlanetarySystem.Resultant(i);
-                    Vector newacceleration = resultant.Scale(1 / (mass*1000));
+                    Vector newacceleration = resultant.Scale(1 / mass);
 
                     Vector newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
 
@@ -141,7 +141,7 @@ namespace GUI
                 Debug.WriteLine("Newpos");
                 newpos.Data();
 
-               // Debug.WriteLine($"Average speed = {position.VectorTo(newpos).Scale(1 / timestep).Modulus()}");
+                newpos = newpos.Scale(0.001);
                 return newpos;
             }
 
@@ -167,6 +167,7 @@ namespace GUI
                 newvelocity = newvelocity.Add(acceleration);
                 Debug.WriteLine("newvel:");
                 newvelocity.Data();
+                newvelocity = newvelocity.Scale(0.001);
                 return newvelocity;
             }
 

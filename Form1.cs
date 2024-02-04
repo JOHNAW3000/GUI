@@ -23,7 +23,7 @@ namespace GUI
             Debug.WriteLine("Creating force matrix");
 
             // Creates a list of planets to loop through
-            // string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
+           // string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
             string[] planets = { "Sun", "Mercury" };
             foreach (string planet in planets)
             {
@@ -58,7 +58,7 @@ namespace GUI
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(60, 60 * 24, g);
+            sim.Run(3600*24, 365, g);
         }
     }
 }

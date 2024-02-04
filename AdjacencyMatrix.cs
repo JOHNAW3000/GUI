@@ -71,6 +71,8 @@ namespace GUI
                             Body b = bodies[j];
                             double masses = a.Mass * b.Mass;
                             Vector rvector = a.Position.VectorTo(b.Position);
+                            //Convert to m from km
+                            rvector = rvector.Scale(1000);
                             double rmod = rvector.Modulus();
                             //Debug.WriteLine($"Distance between {a.Name} and {b.Name} = {rmod}");
                             double rsquared = Math.Pow(rmod, 2);
