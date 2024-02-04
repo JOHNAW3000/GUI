@@ -35,12 +35,7 @@ namespace GUI
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
-                        //
-                        Body test = bodies[bodyindex];
-
-                        Debug.WriteLine($"Position of {test.Name}");
-                        test.Position.Data();
-                        //
+                       
                         Vector pos = coordinates[bodyindex];
                         Colours colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
                         Pen p = colours.getOutline();
@@ -52,7 +47,7 @@ namespace GUI
 
                     this.Step(timestep);
 
-                    //Thread.Sleep(1);
+                    Thread.Sleep(1);
                 }
             }
 
@@ -74,8 +69,8 @@ namespace GUI
 
                     Vector acceleration = resultant.Scale(1 / mass);
                    
-                    Debug.WriteLine($"Acceleration of {body.Name}");
-                    acceleration.Data();
+                    //Debug.WriteLine($"Acceleration of {body.Name}");
+                    //acceleration.Data();
 
                     Vector position = body.Position;
                     position = position.Scale(1000);
@@ -101,12 +96,12 @@ namespace GUI
 
                     // Outputs and checks
 
-                    Debug.WriteLine($"Velocity of {body.Name}");
-                    body.Velocity.Data();
+                   // Debug.WriteLine($"Velocity of {body.Name}");
+                    //body.Velocity.Data();
 
                     body.Velocity = newvelocity;
-                    Debug.WriteLine($"newVelocity of {body.Name}");
-                    body.Velocity.Data();
+                    //Debug.WriteLine($"newVelocity of {body.Name}");
+                    //body.Velocity.Data();
 
                     PlanetarySystem.ReplaceBody(body, i);
                 }
@@ -118,12 +113,12 @@ namespace GUI
 
             private static Vector deltaPosition(Vector position, Vector velocity, Vector acceleration, double timestep)
             {
-                // fix this
-                Debug.WriteLine("deltaPosition using pos, vel, acc and t:");
-                position.Data();
-                velocity.Data();
-                acceleration.Data();
-                Debug.WriteLine(timestep);
+                
+               // Debug.WriteLine("deltaPosition using pos, vel, acc and t:");
+                //position.Data();
+               // velocity.Data();
+                //acceleration.Data();
+                //Debug.WriteLine(timestep);
 
                 Vector displacement = velocity.Scale(timestep);
 
@@ -132,11 +127,11 @@ namespace GUI
                 Vector deltaP = displacement.Add(AccTimeSquared);
                 Vector newpos = position.Add(deltaP);
 
-                Debug.WriteLine("Pos");
-                position.Data();
+                //Debug.WriteLine("Pos");
+                //position.Data();
 
-                Debug.WriteLine("Newpos");
-                newpos.Data();
+                //Debug.WriteLine("Newpos");
+                //newpos.Data();
 
                 newpos = newpos.Scale(0.001);
                 return newpos;
@@ -145,9 +140,9 @@ namespace GUI
             private static Vector deltaVelocity(Vector velocity, Vector acceleration, Vector newacceleration, double timestep)
             {
 
-                Debug.WriteLine("Old acc, new acc");
-                acceleration.Data();
-                newacceleration.Data();
+               // Debug.WriteLine("Old acc, new acc");
+                //acceleration.Data();
+               // newacceleration.Data();
 
                 Vector newvelocity = velocity;
 
@@ -158,8 +153,8 @@ namespace GUI
                 acceleration = acceleration.Scale(0.5 * timestep);
 
                 newvelocity = newvelocity.Add(acceleration);
-                Debug.WriteLine("newvel:");
-                newvelocity.Data();
+                //Debug.WriteLine("newvel:");
+                //newvelocity.Data();
                 newvelocity = newvelocity.Scale(0.001);
                 return newvelocity;
             }

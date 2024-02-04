@@ -41,12 +41,12 @@ namespace GUI
                 for (int i = 0; i < bodies.Count; i++)
                 {
                     Body b = bodies[i];
-                    Debug.WriteLine(b.Name);
+                    //Debug.WriteLine(b.Name);
                     Vector bpos = b.Position;
                     if (bpos.X == 0 && bpos.Y == 0)
                     {
                         //Debug.WriteLine($"Coords of {b.Name}:");
-                        bpos.Add(centre).Data();
+                        //bpos.Add(centre).Data();
                         coords.Add(bpos.Add(centre));
                     }
                     else
@@ -55,7 +55,7 @@ namespace GUI
                         Vector bcoords = bpos.Scale(0.000001);
                         //Debug.WriteLine($"Coords of {b.Name}:");
                         bcoords = bcoords.Add(centre);
-                        bcoords.Data();
+                        //bcoords.Data();
                         coords.Add(bcoords);
                     }
                 }

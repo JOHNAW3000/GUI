@@ -24,7 +24,9 @@ namespace GUI
 
             // Creates a list of planets to loop through
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-            string[] planets = { "Sun", "Earth" };
+            //string[] planets = { "Sun", "Earth" };
+            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars"};
+
             foreach (string planet in planets)
             {
                 // Creates a body from each API response
