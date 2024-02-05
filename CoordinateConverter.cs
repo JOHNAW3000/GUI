@@ -26,23 +26,49 @@ namespace GUI
             // Outputs coordinate list
             public List<Vector> ConvertCoords(AdjacencyMatrix planets)
             {
-                //Debug.WriteLine("Converting coords");
 
                 List<Vector> coords = new List<Vector>();
-
 
                 Vector centre = new Vector(this.width / 2, this.height / 2);
 
                 List<Body> bodies = planets.GetBodies();
-                //this.Coords = new List<Vector>(bodies.Count());
                
-                double logbase = 1.1;
+                List<double> logdistances = new List<double>();
+
+
+                foreach (Body body in bodies)
+                {
+                    if (body.Position.Modulus() != 0)
+                    {
+                        Vector origin = new Vector(0, 0);
+                        Vector radius = origin.VectorTo(body.Position);
+                        double radiusmod = radius.Modulus();
+                        double logdist = Math.Log(radiusmod);
+                        logdistances.Add(logdist);
+                    }
+                    else
+                    {
+                        logdistances.Add(0);
+                    }
+                }
+
+                // Calculate furthest log distance
+
+                double maxlogdist = logdistances.Max();
+
+                double scalarx = width / maxlogdist;
+                double scalary = height / maxlogdist;
+
+
+
+
 
                 for (int i = 0; i < bodies.Count; i++)
                 {
                     Body b = bodies[i];
                     //Debug.WriteLine(b.Name);
                     Vector bpos = b.Position;
+
                     if (bpos.X == 0 && bpos.Y == 0)
                     {
                         //Debug.WriteLine($"Coords of {b.Name}:");
@@ -51,11 +77,13 @@ namespace GUI
                     }
                     else
                     {
-                        //Vector bcoords = bpos.Log(logbase);
-                        Vector bcoords = bpos.Scale(0.000001);
-                        //Debug.WriteLine($"Coords of {b.Name}:");
+                        //Vector bcoords = bpos.Scale(0.000001);
+                        Vector bcoords = new Vector(bpos.X, bpos.Y);
+                        bcoords.X = logdistances[i] * scalarx;
+                        bcoords.Y = logdistances[i] + scalary;
+
+
                         bcoords = bcoords.Add(centre);
-                        //bcoords.Data();
                         coords.Add(bcoords);
                     }
                 }

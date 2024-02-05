@@ -20,7 +20,7 @@ namespace GUI
 
             // Methods
 
-            public void Run(int timestep, int length, Graphics g)
+            public void Run(int timestep, int length, Graphics g, Form form)
             {
 
 
@@ -30,6 +30,9 @@ namespace GUI
                 for (int i = 0; i < length; i++)
                 {
                     // need to invalidate here!!!
+
+                    form.Refresh();
+
                     List<Body> bodies = PlanetarySystem.GetBodies();
                     List<Vector> coordinates = converter.ConvertCoords(PlanetarySystem);
 

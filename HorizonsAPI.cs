@@ -67,6 +67,7 @@
             {
                 string response = this.Query(queryname);
 
+                // JUPITER's mass is stored in grams!!!
 
                 string namepattern = @"Revised: \w+ \d+, \d+\s+\d*\s(\w+)";
                 Match namematch = Regex.Match(response, namepattern);

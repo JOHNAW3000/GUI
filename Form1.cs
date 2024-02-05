@@ -24,8 +24,10 @@ namespace GUI
 
             // Creates a list of planets to loop through
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-            //string[] planets = { "Sun", "Earth" };
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars"};
+            string[] planets = { "Sun", "Earth" };
+            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars"};
+            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
+
 
             foreach (string planet in planets)
             {
@@ -57,10 +59,11 @@ namespace GUI
             CoordinateConverter coords = new CoordinateConverter(1000, 1000);
 
             Graphics g = this.CreateGraphics();
+            
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(3600*24, 365, g);
+            sim.Run(3600*24, 365*2, g, this);
         }
     }
 }
