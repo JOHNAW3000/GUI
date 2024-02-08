@@ -21,34 +21,43 @@
             public void Run(int timestep, int length, Graphics g, Form form)
             {
 
-
-
                 int size = 20;
 
                 for (int i = 0; i < length; i++)
                 {
-                    // need to invalidate here!!!
 
                     form.Refresh();
 
+
                     List<Body> bodies = PlanetarySystem.GetBodies();
-                    List<Vector> coordinates = converter.ConvertCoords(PlanetarySystem);
+                    List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
 
                         Vector pos = coordinates[bodyindex];
-                        Colours colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
-                        Pen p = colours.getOutline();
-                        Brush b = colours.getFill();
+                        Appearance colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
+                        Pen p = colours.getPrimary();
+                        Brush b = colours.getSecondary();
 
                         g.FillEllipse(b, (float)pos.X, (float)pos.Y, size, size);
                         g.DrawEllipse(p, (float)pos.X, (float)pos.Y, size, size);
+
+
+
+                        Vector velocity = bodies[bodyindex].Velocity;
+                        float startx = (float)pos.X;
+                        float starty = (float)pos.Y;
+                        float endx = (float)pos.Add(velocity).X;
+                        float endy = (float)pos.Add(velocity).Y;
+                        g.DrawLine(p, startx, starty, endx, endy);
                     }
 
                     this.Step(timestep);
 
-                    Thread.Sleep(10);
+
+                    // make this consistent
+                    Thread.Sleep(1);
                 }
             }
 
@@ -121,7 +130,7 @@
                 }
 
                 //PlanetarySystem.Data();
-                converter.ConvertCoords(PlanetarySystem);
+                //converter.ConvertCoordsLog(PlanetarySystem);
 
             }
 

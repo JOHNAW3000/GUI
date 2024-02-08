@@ -34,21 +34,42 @@ namespace GUI
                 // Creates a body from each API response
                 Body body = api.ParseAPIResponse(planet);
 
-                if (planet == "Sun")
+                switch (body.Name)
                 {
-                    Pen p = new Pen(Color.OrangeRed);
-                    Brush b = new SolidBrush(Color.Yellow);
-                    Colours sun = new Colours(p, b);
-                    body.Colours = sun;
-                    body.MakeStar();
+                    case "Sun":
+                        body.Colours = new Appearance(Color.OrangeRed, Color.Yellow);
+                        body.MakeStar();
+                        break;
+                    case "Mercury":
+                        body.Colours = new Appearance(Color.Gray, Color.DarkGray);
+                        break;
+                    case "Venus":
+                        body.Colours = new Appearance(Color.DarkOrange, Color.Chocolate);
+                        break;
+                    case "Earth":
+                        body.Colours = new Appearance(Color.SpringGreen, Color.SteelBlue);
+                        break;
+                    case "Mars":
+                        body.Colours = new Appearance(Color.Firebrick, Color.Tomato);
+                        break;
+                    case "Jupiter":
+                        body.Colours = new Appearance(Color.Peru, Color.Tan);
+                        break;
+                    case "Saturn":
+                        body.Colours = new Appearance(Color.DarkKhaki, Color.Khaki);
+                        break;
+                    case "Neptune":
+                        body.Colours = new Appearance(Color.LightSkyBlue, Color.LightCyan);
+                        break;
+                    case "Uranus":
+                        body.Colours = new Appearance(Color.RoyalBlue, Color.SlateBlue);
+                        break;
+                    case "Pluto":
+                        body.Colours = new Appearance(Color.PaleTurquoise, Color.Lavender);
+                        break;
                 }
-                else
-                {
-                    Pen p = new Pen(Color.Gray);
-                    Brush b = new SolidBrush(Color.DarkGray);
-                    Colours merc = new Colours(p, b);
-                    body.Colours = merc;
-                }
+
+
 
                 // Add to force matrix
                 forces.AddBody(body);
@@ -64,7 +85,7 @@ namespace GUI
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(3600*24, 365*2, g, this);
+            sim.Run(3600*24, 365*1, g, this);
         }
     }
 }

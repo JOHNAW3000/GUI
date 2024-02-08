@@ -14,7 +14,7 @@ namespace GUI
         private Vector position;
         private Vector velocity;
         private string stats;
-        private Colours colours;
+        private Appearance colours;
         private bool isstar = false;
 
 
@@ -33,7 +33,7 @@ namespace GUI
         // Methods
 
 
-        public Colours Colours
+        public Appearance Colours
         {
             get { return colours; }
             set { colours = value; }
