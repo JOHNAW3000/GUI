@@ -33,61 +33,27 @@ namespace GUI
 
                 List<Body> bodies = planets.GetBodies();
                
-                List<double> logdistances = new List<double>();
-
-
                 foreach (Body body in bodies)
                 {
-                    if (body.Position.Modulus() != 0)
+                    Vector bpos = body.Position;
+
+                    Vector direction = bpos.Unit();
+                    double magnitude = bpos.Modulus();
+
+                    double logbase = 1.1;
+
+                    Vector coordinate = centre;
+
+                    if (magnitude != 0)
                     {
-                        Vector origin = new Vector(0, 0);
-                        Vector radius = origin.VectorTo(body.Position);
-                        double radiusmod = radius.Modulus();
-                        double logdist = Math.Log(radiusmod);
-                        logdistances.Add(logdist);
+                        magnitude = Math.Log(magnitude, logbase);
+                        coordinate = direction.Scale(magnitude);
+                        coordinate = coordinate.Add(centre);
                     }
-                    else
-                    {
-                        logdistances.Add(0);
-                    }
+
+                    coords.Add(coordinate);
                 }
-
-                // Calculate furthest log distance
-
-                double maxlogdist = logdistances.Max();
-
-                double scalarx = width / maxlogdist;
-                double scalary = height / maxlogdist;
-
-
-
-
-
-                for (int i = 0; i < bodies.Count; i++)
-                {
-                    Body b = bodies[i];
-                    //Debug.WriteLine(b.Name);
-                    Vector bpos = b.Position;
-
-                    if (bpos.X == 0 && bpos.Y == 0)
-                    {
-                        //Debug.WriteLine($"Coords of {b.Name}:");
-                        //bpos.Add(centre).Data();
-                        coords.Add(bpos.Add(centre));
-                    }
-                    else
-                    {
-                        //Vector bcoords = bpos.Scale(0.000001);
-                        Vector bcoords = new Vector(bpos.X, bpos.Y);
-                        bcoords.X = logdistances[i] * scalarx;
-                        bcoords.Y = logdistances[i] + scalary;
-
-
-                        bcoords = bcoords.Add(centre);
-                        coords.Add(bcoords);
-                    }
-                }
-
+                
                 return coords;
             }
 

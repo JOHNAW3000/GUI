@@ -24,9 +24,9 @@ namespace GUI
 
             // Creates a list of planets to loop through
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-            string[] planets = { "Sun", "Earth" };
+            //string[] planets = { "Sun", "Earth" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars"};
-            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
+            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
 
 
             foreach (string planet in planets)
@@ -40,6 +40,7 @@ namespace GUI
                     Brush b = new SolidBrush(Color.Yellow);
                     Colours sun = new Colours(p, b);
                     body.Colours = sun;
+                    body.MakeStar();
                 }
                 else
                 {

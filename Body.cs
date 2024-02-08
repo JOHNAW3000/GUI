@@ -1,4 +1,7 @@
-﻿namespace GUI
+﻿using System.Diagnostics;
+using System.Xml.Linq;
+
+namespace GUI
 {
     public class Body
     {
@@ -12,6 +15,7 @@
         private Vector velocity;
         private string stats;
         private Colours colours;
+        private bool isstar = false;
 
 
         // Constructor
@@ -60,13 +64,26 @@
 
         public void Data()
         {
-            Console.WriteLine($"Name: {this.name}");
-            Console.WriteLine($"ID: {this.ID}");
-            Console.WriteLine($"Mass: {this.mass}kg");
-            Console.WriteLine($"Radius: {this.radius}km");
-            Console.WriteLine($"Position: X = {this.position.X}, Y = {this.position.Y}");
-            Console.WriteLine($"Velocity: VX = {this.velocity.X}, VY = {this.velocity.Y}");
-            Console.WriteLine();
+            Debug.WriteLine($"Name: {this.name}");
+            Debug.WriteLine($"ID: {this.ID}");
+            Debug.WriteLine($"Mass: {this.mass}kg");
+            Debug.WriteLine($"Radius: {this.radius}km");
+            Debug.WriteLine($"Position: X = {this.position.X}, Y = {this.position.Y}");
+            Debug.WriteLine($"Velocity: VX = {this.velocity.X}, VY = {this.velocity.Y}");
+            Debug.WriteLine("");
+        }
+
+
+
+        public void MakeStar()
+        {
+            isstar = true;
+        }
+        public bool IsAStar()
+        {
+            return isstar;
         }
     }
+
+
 }

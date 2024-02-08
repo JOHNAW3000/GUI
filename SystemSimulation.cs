@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace GUI
+﻿namespace GUI
 {
     internal partial class Program
     {
@@ -38,7 +36,7 @@ namespace GUI
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
-                       
+
                         Vector pos = coordinates[bodyindex];
                         Colours colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
                         Pen p = colours.getOutline();
@@ -50,7 +48,7 @@ namespace GUI
 
                     this.Step(timestep);
 
-                    Thread.Sleep(1);
+                    Thread.Sleep(10);
                 }
             }
 
@@ -71,7 +69,7 @@ namespace GUI
                     Vector resultant = PlanetarySystem.Resultant(i);
 
                     Vector acceleration = resultant.Scale(1 / mass);
-                   
+
                     //Debug.WriteLine($"Acceleration of {body.Name}");
                     //acceleration.Data();
 
@@ -83,7 +81,12 @@ namespace GUI
 
 
                     // Calculate new position
-                    Vector newpos = deltaPosition(position, velocity, acceleration, timestep);
+                    Vector newpos = new Vector(0, 0);
+
+                    if (!body.IsAStar())
+                    {
+                        newpos = deltaPosition(position, velocity, acceleration, timestep);
+                    }
 
                     // Calculate new velocity
 
@@ -94,18 +97,26 @@ namespace GUI
                     resultant = PlanetarySystem.Resultant(i);
                     Vector newacceleration = resultant.Scale(1 / mass);
 
-                    Vector newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
+
+                    Vector newvelocity = new Vector(0, 0);
+
+                    if (!body.IsAStar())
+                    {
+                        newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
+
+                    }
 
 
                     // Outputs and checks
 
-                   // Debug.WriteLine($"Velocity of {body.Name}");
+                    // Debug.WriteLine($"Velocity of {body.Name}");
                     //body.Velocity.Data();
 
                     body.Velocity = newvelocity;
                     //Debug.WriteLine($"newVelocity of {body.Name}");
                     //body.Velocity.Data();
 
+                    
                     PlanetarySystem.ReplaceBody(body, i);
                 }
 
@@ -116,10 +127,10 @@ namespace GUI
 
             private static Vector deltaPosition(Vector position, Vector velocity, Vector acceleration, double timestep)
             {
-                
-               // Debug.WriteLine("deltaPosition using pos, vel, acc and t:");
+
+                // Debug.WriteLine("deltaPosition using pos, vel, acc and t:");
                 //position.Data();
-               // velocity.Data();
+                // velocity.Data();
                 //acceleration.Data();
                 //Debug.WriteLine(timestep);
 
@@ -143,9 +154,9 @@ namespace GUI
             private static Vector deltaVelocity(Vector velocity, Vector acceleration, Vector newacceleration, double timestep)
             {
 
-               // Debug.WriteLine("Old acc, new acc");
+                // Debug.WriteLine("Old acc, new acc");
                 //acceleration.Data();
-               // newacceleration.Data();
+                // newacceleration.Data();
 
                 Vector newvelocity = velocity;
 
