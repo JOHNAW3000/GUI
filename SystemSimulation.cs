@@ -30,7 +30,9 @@
 
 
                     List<Body> bodies = PlanetarySystem.GetBodies();
-                    List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
+                    List<Vector> coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
+                    //List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
+
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
@@ -40,10 +42,6 @@
                         Pen p = colours.getPrimary();
                         Brush b = colours.getSecondary();
 
-                        g.FillEllipse(b, (float)pos.X, (float)pos.Y, size, size);
-                        g.DrawEllipse(p, (float)pos.X, (float)pos.Y, size, size);
-
-
 
                         Vector velocity = bodies[bodyindex].Velocity;
                         float startx = (float)pos.X;
@@ -51,13 +49,17 @@
                         float endx = (float)pos.Add(velocity).X;
                         float endy = (float)pos.Add(velocity).Y;
                         g.DrawLine(p, startx, starty, endx, endy);
+
+
+                        g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+                        g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
                     }
 
                     this.Step(timestep);
 
 
                     // make this consistent
-                    Thread.Sleep(1);
+                    //Thread.Sleep(10);
                 }
             }
 
