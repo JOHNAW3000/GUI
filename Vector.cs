@@ -91,5 +91,21 @@ namespace GUI
             }
             return new Vector(x, y);
         }
+
+        public double AngleBetween(Vector v)
+        {
+
+            double scalarproduct = ScalarProduct(this, v);
+            double modproduct = this.Modulus() * v.Modulus();
+            double result = scalarproduct / modproduct;
+            return Math.Acos(result);
+        }
+
+        private static double ScalarProduct(Vector a, Vector b)
+        {
+            double xproduct = a.X * b.X;
+            double yproduct = a.Y * b.Y;
+            return xproduct + yproduct;
+        }
     }
 }

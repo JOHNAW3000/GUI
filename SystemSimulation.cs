@@ -30,8 +30,8 @@
 
 
                     List<Body> bodies = PlanetarySystem.GetBodies();
-                    List<Vector> coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
-                    //List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
+                    //List<Vector> coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
+                    List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
 
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)

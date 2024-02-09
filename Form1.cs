@@ -25,8 +25,8 @@ namespace GUI
             // Creates a list of planets to loop through
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
             //string[] planets = { "Sun", "Earth" };
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
-            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
+            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
+            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
 
 
             foreach (string planet in planets)
