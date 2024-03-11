@@ -26,13 +26,13 @@
                 for (int i = 0; i < length; i++)
                 {
 
-                    form.Refresh();
 
 
                     List<Body> bodies = PlanetarySystem.GetBodies();
                     //List<Vector> coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
                     List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
 
+                    form.Refresh();
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
@@ -127,7 +127,7 @@
                     //Debug.WriteLine($"newVelocity of {body.Name}");
                     //body.Velocity.Data();
 
-                    
+
                     PlanetarySystem.ReplaceBody(body, i);
                 }
 
