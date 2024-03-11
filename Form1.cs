@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Text.Json.Nodes;
 using static GUI.Program;
 
 
@@ -86,15 +87,22 @@ namespace GUI
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(3600 * 24, 364, g, this);
+            sim.Run(3600 * 24, 10, g, this);
 
 
 
 
-            
-            string jsonmatrix = JsonConvert.SerializeObject(forces);
-            string path = "jsonmatrix.json";
-            File.WriteAllText(path, jsonmatrix);
+            Vector v = new Vector (1,1);
+            Body b = new Body("Sample Body", "123", 100.0, 10.0, v, v);
+
+            List<Body> bodies = forces.GetBodies();
+
+            string jsonobject = JsonConvert.SerializeObject(bodies);
+            string path = "jsonobject.json";
+            File.WriteAllText(path, jsonobject);
+
+
+
         }
 
 
