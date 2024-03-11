@@ -1,4 +1,6 @@
-﻿namespace GUI
+﻿using Newtonsoft.Json;
+namespace GUI
+
 {
     internal partial class Program
     {
@@ -183,8 +185,6 @@
                 newvelocity = newvelocity.Scale(0.001);
                 return newvelocity;
             }
-
-
 
 
         }

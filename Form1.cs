@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Diagnostics;
 using static GUI.Program;
 
@@ -86,6 +87,17 @@ namespace GUI
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
             sim.Run(3600 * 24, 364, g, this);
+
+
+
+
+            
+            string jsonmatrix = JsonConvert.SerializeObject(forces);
+            string path = "jsonmatrix.json";
+            File.WriteAllText(path, jsonmatrix);
         }
+
+
+
     }
 }
