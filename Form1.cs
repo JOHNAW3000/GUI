@@ -1,7 +1,9 @@
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Runtime.Intrinsics.Arm;
 using System.Text.Json.Nodes;
 using static GUI.Program;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 
 namespace GUI
@@ -40,7 +42,7 @@ namespace GUI
                 {
                     case "Sun":
                         body.Colours = new Appearance(Color.OrangeRed, Color.Yellow);
-                        body.MakeStar();
+                        body.IsStar = true;
                         break;
                     case "Mercury":
                         body.Colours = new Appearance(Color.Gray, Color.DarkGray);
@@ -87,23 +89,40 @@ namespace GUI
 
             SystemSimulation sim = new SystemSimulation(forces, coords);
 
-            sim.Run(3600 * 24, 10, g, this);
+            sim.Run(3600 * 24, 182, g, this);
 
 
 
+            string jsonfile = sim.SaveSim();
+            string path = "simulation.json";
+            File.WriteAllText(path, jsonfile);
 
-            Vector v = new Vector (1,1);
-            Body b = new Body("Sample Body", "123", 100.0, 10.0, v, v);
-
-            List<Body> bodies = forces.GetBodies();
-
-            string jsonobject = JsonConvert.SerializeObject(bodies);
-            string path = "jsonobject.json";
-            File.WriteAllText(path, jsonobject);
+            sim.Run(3600 * 24, 182, g, this);
 
 
+            // Load simulation
+
+            string jsontext = File.ReadAllText(path);
+
+            List<Body> storedbodies = JsonConvert.DeserializeObject<List<Body>>(jsontext);
+            AdjacencyMatrix newsystem = new AdjacencyMatrix();
+
+            foreach (Body b in storedbodies)
+            {
+                newsystem.AddBody(b);
+            }
+
+            SystemSimulation sim2 = new SystemSimulation(newsystem, coords);
+
+            sim2.Run(3600 * 24, 182, g, this);
+
+
+            
 
         }
+
+
+        
 
 
 

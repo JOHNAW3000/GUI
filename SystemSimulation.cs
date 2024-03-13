@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 namespace GUI
 
 {
@@ -19,6 +20,15 @@ namespace GUI
 
 
             // Methods
+
+            public string SaveSim()
+            {
+                List<Body> bodies = PlanetarySystem.GetBodies();
+               
+                string jsontext = JsonConvert.SerializeObject(bodies);
+
+                return jsontext;
+            }
 
             public void Run(int timestep, int length, Graphics g, Form form)
             {
@@ -41,8 +51,8 @@ namespace GUI
 
                         Vector pos = coordinates[bodyindex];
                         Appearance colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
-                        Pen p = colours.getPrimary();
-                        Brush b = colours.getSecondary();
+                        Pen p = new Pen(colours.Primary, 5);
+                        Brush b = new SolidBrush(colours.Secondary);
 
 
                         Vector velocity = bodies[bodyindex].Velocity;
@@ -96,7 +106,7 @@ namespace GUI
                     // Calculate new position
                     Vector newpos = new Vector(0, 0);
 
-                    if (!body.IsAStar())
+                    if (!body.IsStar)
                     {
                         newpos = deltaPosition(position, velocity, acceleration, timestep);
                     }
@@ -113,7 +123,7 @@ namespace GUI
 
                     Vector newvelocity = new Vector(0, 0);
 
-                    if (!body.IsAStar())
+                    if (!body.IsStar)
                     {
                         newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
 

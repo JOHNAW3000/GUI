@@ -33,11 +33,6 @@ namespace GUI
         // Methods
 
 
-        public Appearance Colours
-        {
-            get { return colours; }
-            set { colours = value; }
-        }
         public string Name
         {
             get { return name; }
@@ -61,6 +56,19 @@ namespace GUI
             set { velocity = value; }
         }
 
+        public Appearance Colours
+        {
+            get { return colours; }
+            set { colours = value; }
+        }
+
+        public bool IsStar
+        {
+            get { return isstar; }
+            set { isstar = value; }
+        }
+
+
 
         public void Data()
         {
@@ -71,17 +79,6 @@ namespace GUI
             Debug.WriteLine($"Position: X = {this.position.X}, Y = {this.position.Y}");
             Debug.WriteLine($"Velocity: VX = {this.velocity.X}, VY = {this.velocity.Y}");
             Debug.WriteLine("");
-        }
-
-
-
-        public void MakeStar()
-        {
-            isstar = true;
-        }
-        public bool IsAStar()
-        {
-            return isstar;
         }
     }
 

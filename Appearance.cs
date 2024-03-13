@@ -1,28 +1,32 @@
-﻿namespace GUI
+﻿using System.Xml.Linq;
+
+namespace GUI
 {
     public class Appearance
     {
-        private Pen primary;
-        private Brush secondary;
+        private Color primary;
+        private Color secondary;
 
         public Appearance(Color primary, Color secondary)
         {
 
-            this.primary = new Pen(primary, 5);
-            this.secondary = new SolidBrush(secondary);
+            this.primary = primary;
+            this.secondary = secondary;
         }
 
 
 
 
-        public Pen getPrimary()
+        public Color Primary
         {
-            return primary;
+            get { return primary; }
+            set { primary = value; }
         }
 
-        public Brush getSecondary()
+        public Color Secondary
         {
-            return secondary;
+            get { return secondary; }
+            set { secondary = value; }
         }
 
     }
