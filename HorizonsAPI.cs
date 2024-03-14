@@ -17,9 +17,16 @@
             string center = "CENTER='@sun'";
             string make_ephem = "MAKE_EPHEM='YES'";
             string table_type = "TABLE_TYPE='VECTORS'";
-            // START TIME AND STOP TIME ARE CURRENTLY HARDCODED! THESE WILL NEED CHANGING IF YOU WANT UPDATED VALUES
-            string start_time = "START_TIME='2024-01-22'";
-            string stop_time = "STOP_TIME='2024-01-23'";
+            // 
+            static DateTime startdate = DateTime.Now;
+            static DateTime stopdate = startdate.AddDays(1);
+            static string startstring = startdate.ToString("yyyy-MM-dd");
+            static string stopstring = stopdate.ToString("yyyy-MM-dd");
+
+
+            string start_time = $"START_TIME='{startstring}'";
+            string stop_time = $"STOP_TIME='{stopstring}'";
+            //
             string step_size = "STEP_SIZE='1 d'";
             string out_units = "OUT_UNITS='KM-S'";
             string ref_plane = "REF_PLANE='ECLIPTIC'";

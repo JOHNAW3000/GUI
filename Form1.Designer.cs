@@ -29,18 +29,82 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Sim1));
-            StartBtn = new Button();
+            menuStrip1 = new MenuStrip();
+            FileMenu = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            loadToolStripMenuItem = new ToolStripMenuItem();
+            getLiveSolarSystemBtn = new ToolStripMenuItem();
+            RunBtn = new ToolStripMenuItem();
+            DateAndTimeLabel = new Label();
+            saveFileDialog1 = new SaveFileDialog();
+            openFileDialog1 = new OpenFileDialog();
+            stopToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // StartBtn
+            // menuStrip1
             // 
-            StartBtn.Location = new Point(28, 20);
-            StartBtn.Name = "StartBtn";
-            StartBtn.Size = new Size(75, 23);
-            StartBtn.TabIndex = 0;
-            StartBtn.Text = "Go!";
-            StartBtn.UseVisualStyleBackColor = true;
-            StartBtn.Click += StartBtn_Click;
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(984, 24);
+            menuStrip1.TabIndex = 1;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // FileMenu
+            // 
+            FileMenu.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem, getLiveSolarSystemBtn });
+            FileMenu.Name = "FileMenu";
+            FileMenu.Size = new Size(37, 20);
+            FileMenu.Text = "File";
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(186, 22);
+            saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
+            // 
+            // loadToolStripMenuItem
+            // 
+            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            loadToolStripMenuItem.Size = new Size(186, 22);
+            loadToolStripMenuItem.Text = "Load";
+            loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
+            // 
+            // getLiveSolarSystemBtn
+            // 
+            getLiveSolarSystemBtn.Name = "getLiveSolarSystemBtn";
+            getLiveSolarSystemBtn.Size = new Size(186, 22);
+            getLiveSolarSystemBtn.Text = "Get Live Solar System";
+            getLiveSolarSystemBtn.Click += getLiveSolarSystemBtn_Click;
+            // 
+            // RunBtn
+            // 
+            RunBtn.Name = "RunBtn";
+            RunBtn.Size = new Size(37, 20);
+            RunBtn.Text = "Go!";
+            RunBtn.Click += RunBtn_Click;
+            // 
+            // DateAndTimeLabel
+            // 
+            DateAndTimeLabel.AutoSize = true;
+            DateAndTimeLabel.Location = new Point(8, 31);
+            DateAndTimeLabel.Name = "DateAndTimeLabel";
+            DateAndTimeLabel.Size = new Size(190, 15);
+            DateAndTimeLabel.TabIndex = 2;
+            DateAndTimeLabel.Text = "Currently outside space and time...";
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // stopToolStripMenuItem
+            // 
+            stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            stopToolStripMenuItem.Size = new Size(46, 20);
+            stopToolStripMenuItem.Text = "Stop!";
+            stopToolStripMenuItem.Click += stopToolStripMenuItem_Click;
             // 
             // Sim1
             // 
@@ -48,14 +112,27 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(984, 961);
-            Controls.Add(StartBtn);
+            Controls.Add(DateAndTimeLabel);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "Sim1";
             Text = "Simulation - 1";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        private Button StartBtn;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem FileMenu;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem loadToolStripMenuItem;
+        private ToolStripMenuItem RunBtn;
+        private ToolStripMenuItem getLiveSolarSystemBtn;
+        private Label DateAndTimeLabel;
+        private SaveFileDialog saveFileDialog1;
+        private OpenFileDialog openFileDialog1;
+        private ToolStripMenuItem stopToolStripMenuItem;
     }
 }

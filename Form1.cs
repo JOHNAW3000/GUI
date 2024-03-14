@@ -1,30 +1,67 @@
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Runtime.Intrinsics.Arm;
-using System.Text.Json.Nodes;
 using static GUI.Program;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 
 namespace GUI
 {
     public partial class Sim1 : Form
     {
+
+        private static AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
+        private CoordinateConverter coordcon;
+
+        private SystemSimulation sim;
+
+        private Graphics g;
+
+        private bool running = false;
         public Sim1()
         {
             InitializeComponent();
             this.DoubleBuffered = true;
 
+            coordcon = new CoordinateConverter(this.Width, this.Height);
+
+            g = this.CreateGraphics();
+
+        }
+
+        public void UpdateLabel(string newdate)
+        {
+            DateAndTimeLabel.Text = newdate;
+        }
+
+        public DateTime GetDate()
+        {
+            return Convert.ToDateTime(DateAndTimeLabel.Text);
+        }
+
+        private static void ResetSystem()
+        {
+            planetarysystem = new AdjacencyMatrix();
         }
 
 
-
-        private void StartBtn_Click(object sender, EventArgs e)
+        private void RunBtn_Click(object sender, EventArgs e)
         {
+            running = true;
+
+            this.Run();
+        }
+
+        private void Run()
+        {
+            while (running)
+            {
+                sim.Run(3600 * 24, 5, g, this);
+            }
+        }
+
+        private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
+        {
+            Sim1.ResetSystem();
             // Create API and force matrix for the simulation
             HorizonsAPI api = new HorizonsAPI();
-            AdjacencyMatrix forces = new AdjacencyMatrix();
-            Debug.WriteLine("Creating force matrix");
 
             // Creates a list of planets to loop through
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
@@ -35,6 +72,7 @@ namespace GUI
 
             foreach (string planet in planets)
             {
+
                 // Creates a body from each API response
                 Body body = api.ParseAPIResponse(planet);
 
@@ -76,32 +114,22 @@ namespace GUI
 
 
                 // Add to force matrix
-                forces.AddBody(body);
-
-                Debug.WriteLine($"   - Added {body.Name}");
-
+                planetarysystem.AddBody(body);
             }
 
-            CoordinateConverter coords = new CoordinateConverter(1000, 1000);
 
-            Graphics g = this.CreateGraphics();
+            sim = new SystemSimulation(planetarysystem, coordcon, this);
+            DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            sim.Run(1, 1, g, this);
 
+        }
 
-            SystemSimulation sim = new SystemSimulation(forces, coords);
-
-            sim.Run(3600 * 24, 182, g, this);
-
-
-
-            string jsonfile = sim.SaveSim();
-            string path = "simulation.json";
-            File.WriteAllText(path, jsonfile);
-
-            sim.Run(3600 * 24, 182, g, this);
-
-
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             // Load simulation
-
+            string path;
+            openFileDialog1.ShowDialog(this);
+            path = openFileDialog1.FileName;
             string jsontext = File.ReadAllText(path);
 
             List<Body> storedbodies = JsonConvert.DeserializeObject<List<Body>>(jsontext);
@@ -112,19 +140,26 @@ namespace GUI
                 newsystem.AddBody(b);
             }
 
-            SystemSimulation sim2 = new SystemSimulation(newsystem, coords);
-
-            sim2.Run(3600 * 24, 182, g, this);
-
-
-            
-
+            Sim1.ResetSystem();
+            planetarysystem = newsystem;
+            sim = new SystemSimulation(planetarysystem, coordcon, this);
+            DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            sim.Run(1, 1, g, this);
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path;
+            saveFileDialog1.ShowDialog(this);
+            path = saveFileDialog1.FileName;
 
-        
+            string jsonfile = sim.SaveSim();
+            File.WriteAllText(path, jsonfile);
+        }
 
-
-
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            running = false;
+        }
     }
 }

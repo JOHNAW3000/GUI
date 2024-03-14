@@ -12,7 +12,7 @@ namespace GUI
             CoordinateConverter converter;
 
             // Constructor
-            public SystemSimulation(AdjacencyMatrix forces, CoordinateConverter converter)
+            public SystemSimulation(AdjacencyMatrix forces, CoordinateConverter converter, Form form)
             {
                 this.PlanetarySystem = forces;
                 this.converter = converter;
@@ -30,7 +30,7 @@ namespace GUI
                 return jsontext;
             }
 
-            public void Run(int timestep, int length, Graphics g, Form form)
+            public void Run(int timestep, int length, Graphics g, Sim1 form)
             {
 
                 int size = 20;
@@ -53,6 +53,7 @@ namespace GUI
                         Appearance colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
                         Pen p = new Pen(colours.Primary, 5);
                         Brush b = new SolidBrush(colours.Secondary);
+                        Pen arrow = new Pen(colours.Secondary, 5);
 
 
                         Vector velocity = bodies[bodyindex].Velocity;
@@ -60,7 +61,7 @@ namespace GUI
                         float starty = (float)pos.Y;
                         float endx = (float)pos.Add(velocity).X;
                         float endy = (float)pos.Add(velocity).Y;
-                        g.DrawLine(p, startx, starty, endx, endy);
+                        g.DrawLine(arrow, startx, starty, endx, endy);
 
 
                         g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
@@ -68,6 +69,10 @@ namespace GUI
                     }
 
                     this.Step(timestep);
+
+                    DateTime datetime = form.GetDate();
+                    datetime = datetime.AddSeconds(timestep);
+                    form.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
 
 
                     // make this consistent
