@@ -38,13 +38,12 @@
             DateAndTimeLabel = new Label();
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
-            stopToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(984, 24);
@@ -95,17 +94,6 @@
             DateAndTimeLabel.TabIndex = 2;
             DateAndTimeLabel.Text = "Currently outside space and time...";
             // 
-            // openFileDialog1
-            // 
-            openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // stopToolStripMenuItem
-            // 
-            stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            stopToolStripMenuItem.Size = new Size(46, 20);
-            stopToolStripMenuItem.Text = "Stop!";
-            stopToolStripMenuItem.Click += stopToolStripMenuItem_Click;
-            // 
             // Sim1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -133,6 +121,5 @@
         private Label DateAndTimeLabel;
         private SaveFileDialog saveFileDialog1;
         private OpenFileDialog openFileDialog1;
-        private ToolStripMenuItem stopToolStripMenuItem;
     }
 }

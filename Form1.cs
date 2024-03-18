@@ -1,4 +1,6 @@
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using static GUI.Program;
 
 
@@ -14,7 +16,6 @@ namespace GUI
 
         private Graphics g;
 
-        private bool running = false;
         public Sim1()
         {
             InitializeComponent();
@@ -44,18 +45,10 @@ namespace GUI
 
         private void RunBtn_Click(object sender, EventArgs e)
         {
-            running = true;
-
-            this.Run();
+            sim.Run(3600 * 24, 365, g, this);
         }
 
-        private void Run()
-        {
-            while (running)
-            {
-                sim.Run(3600 * 24, 5, g, this);
-            }
-        }
+
 
         private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
         {
@@ -129,21 +122,27 @@ namespace GUI
             // Load simulation
             string path;
             openFileDialog1.ShowDialog(this);
-            path = openFileDialog1.FileName;
+            path = openFileDialog1.FileName;    
             string jsontext = File.ReadAllText(path);
 
-            List<Body> storedbodies = JsonConvert.DeserializeObject<List<Body>>(jsontext);
-            AdjacencyMatrix newsystem = new AdjacencyMatrix();
+            JObject jsoncomplete = JObject.Parse(jsontext);
+            JArray jsonplanets = (JArray)jsoncomplete["Planets"];
+            string jsondate = jsoncomplete["Date"].ToString();
 
-            foreach (Body b in storedbodies)
+            AdjacencyMatrix newsystem = new AdjacencyMatrix();
+            foreach (JToken jsonplanet in jsonplanets)
             {
-                newsystem.AddBody(b);
+                Body planet = jsonplanet.ToObject<Body>();
+                newsystem.AddBody(planet);
             }
+
+            DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
+            DateAndTimeLabel.Text = date.ToString("yyyy-MM-dd");
 
             Sim1.ResetSystem();
             planetarysystem = newsystem;
             sim = new SystemSimulation(planetarysystem, coordcon, this);
-            DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            
             sim.Run(1, 1, g, this);
         }
 
@@ -154,7 +153,10 @@ namespace GUI
             path = saveFileDialog1.FileName;
 
             string jsonfile = sim.SaveSim();
-            File.WriteAllText(path, jsonfile);
+            JObject jsoncomplete = new JObject();
+            jsoncomplete["Planets"] = JArray.Parse(jsonfile);
+            jsoncomplete["Date"] = JsonConvert.SerializeObject(GetDate());
+            File.WriteAllText(path, jsoncomplete.ToString());
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)

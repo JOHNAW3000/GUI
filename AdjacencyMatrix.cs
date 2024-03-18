@@ -11,11 +11,11 @@ namespace GUI
             private List<List<Vector>> edges = new List<List<Vector>>();
             private List<Body> bodies = new List<Body>();
 
-            // Constructor
-            public AdjacencyMatrix()
-            {
+            //// Constructor
+            //public AdjacencyMatrix()
+            //{
 
-            }
+            //}
 
             // Methods
 
