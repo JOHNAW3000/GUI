@@ -38,12 +38,14 @@
             DateAndTimeLabel = new Label();
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
+            idiotbox = new Label();
+            stopToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(984, 24);
@@ -94,12 +96,29 @@
             DateAndTimeLabel.TabIndex = 2;
             DateAndTimeLabel.Text = "Currently outside space and time...";
             // 
+            // idiotbox
+            // 
+            idiotbox.AutoSize = true;
+            idiotbox.Location = new Point(8, 58);
+            idiotbox.Name = "idiotbox";
+            idiotbox.Size = new Size(190, 15);
+            idiotbox.TabIndex = 3;
+            idiotbox.Text = "You haven't broken anything, yet...";
+            // 
+            // stopToolStripMenuItem
+            // 
+            stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            stopToolStripMenuItem.Size = new Size(46, 20);
+            stopToolStripMenuItem.Text = "Stop!";
+            stopToolStripMenuItem.Click += stopToolStripMenuItem_Click;
+            // 
             // Sim1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(984, 961);
+            Controls.Add(idiotbox);
             Controls.Add(DateAndTimeLabel);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
@@ -121,5 +140,7 @@
         private Label DateAndTimeLabel;
         private SaveFileDialog saveFileDialog1;
         private OpenFileDialog openFileDialog1;
+        private Label idiotbox;
+        private ToolStripMenuItem stopToolStripMenuItem;
     }
 }

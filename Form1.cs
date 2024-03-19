@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static GUI.Program;
@@ -15,6 +14,8 @@ namespace GUI
         private SystemSimulation sim;
 
         private Graphics g;
+
+        private bool running = false;
 
         public Sim1()
         {
@@ -43,14 +44,39 @@ namespace GUI
         }
 
 
-        private void RunBtn_Click(object sender, EventArgs e)
+        private async void RunBtn_Click(object sender, EventArgs e)
         {
-            sim.Run(3600 * 24, 365, g, this);
+            if (sim == null)
+            {
+                idiotbox.Text = "No simulation loaded!!!";
+            }
+            else
+            {
+                idiotbox.Text = "All Clear";
+                running = true;
+
+                await Running();   
+            }
+
         }
 
+        private async Task Running()
+        {
+            while (running)
+            {
+                await Task.Run(() => sim.Run(3600 * 24, 5, g, this, UpdateUI));
+            }
+        }
 
+        private void UpdateUI(Action action)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(action);
+            }
+        }
 
-        private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
+            private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
         {
             Sim1.ResetSystem();
             // Create API and force matrix for the simulation
@@ -113,7 +139,9 @@ namespace GUI
 
             sim = new SystemSimulation(planetarysystem, coordcon, this);
             DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            sim.Run(1, 1, g, this);
+            idiotbox.Text = "All Clear";
+
+            sim.Run(1, 1, g, this, UpdateUI);
 
         }
 
@@ -122,41 +150,62 @@ namespace GUI
             // Load simulation
             string path;
             openFileDialog1.ShowDialog(this);
-            path = openFileDialog1.FileName;    
-            string jsontext = File.ReadAllText(path);
-
-            JObject jsoncomplete = JObject.Parse(jsontext);
-            JArray jsonplanets = (JArray)jsoncomplete["Planets"];
-            string jsondate = jsoncomplete["Date"].ToString();
-
-            AdjacencyMatrix newsystem = new AdjacencyMatrix();
-            foreach (JToken jsonplanet in jsonplanets)
+            path = openFileDialog1.FileName;
+            if (path != null & path != "")
             {
-                Body planet = jsonplanet.ToObject<Body>();
-                newsystem.AddBody(planet);
+                string jsontext = File.ReadAllText(path);
+                try
+                {
+                    JObject jsoncomplete = JObject.Parse(jsontext);
+                    JArray jsonplanets = (JArray)jsoncomplete["Planets"];
+                    string jsondate = jsoncomplete["Date"].ToString();
+
+                    AdjacencyMatrix newsystem = new AdjacencyMatrix();
+                    foreach (JToken jsonplanet in jsonplanets)
+                    {
+                        Body planet = jsonplanet.ToObject<Body>();
+                        newsystem.AddBody(planet);
+                    }
+
+                    DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
+                    DateAndTimeLabel.Text = date.ToString("yyyy-MM-dd");
+
+                    Sim1.ResetSystem();
+                    planetarysystem = newsystem;
+                    sim = new SystemSimulation(planetarysystem, coordcon, this);
+                    idiotbox.Text = "All Clear";
+
+
+                    sim.Run(1, 1, g, this, UpdateUI);
+                }
+                catch (Exception ex)
+                {
+                    idiotbox.Text = "Invalid simulation file!!!";
+                }
             }
-
-            DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
-            DateAndTimeLabel.Text = date.ToString("yyyy-MM-dd");
-
-            Sim1.ResetSystem();
-            planetarysystem = newsystem;
-            sim = new SystemSimulation(planetarysystem, coordcon, this);
-            
-            sim.Run(1, 1, g, this);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string path;
-            saveFileDialog1.ShowDialog(this);
-            path = saveFileDialog1.FileName;
+            if (sim == null)
+            {
+                idiotbox.Text = "No simulation to save!!!";
+            }
+            else
+            {
+                string path;
+                saveFileDialog1.ShowDialog(this);
+                path = saveFileDialog1.FileName;
 
-            string jsonfile = sim.SaveSim();
-            JObject jsoncomplete = new JObject();
-            jsoncomplete["Planets"] = JArray.Parse(jsonfile);
-            jsoncomplete["Date"] = JsonConvert.SerializeObject(GetDate());
-            File.WriteAllText(path, jsoncomplete.ToString());
+                if (path != null & path != "")
+                {
+                    string jsonfile = sim.SaveSim();
+                    JObject jsoncomplete = new JObject();
+                    jsoncomplete["Planets"] = JArray.Parse(jsonfile);
+                    jsoncomplete["Date"] = JsonConvert.SerializeObject(GetDate());
+                    File.WriteAllText(path, jsoncomplete.ToString());
+                }
+            }
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 namespace GUI
 
 {
@@ -24,13 +23,13 @@ namespace GUI
             public string SaveSim()
             {
                 List<Body> bodies = PlanetarySystem.GetBodies();
-               
+
                 string jsontext = JsonConvert.SerializeObject(bodies);
 
                 return jsontext;
             }
 
-            public void Run(int timestep, int length, Graphics g, Sim1 form)
+            public void Run(int timestep, int length, Graphics g, Sim1 form, Action<Action> asyncaction)
             {
 
                 int size = 20;
@@ -44,7 +43,7 @@ namespace GUI
                     //List<Vector> coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
                     List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
 
-                    form.Refresh();
+                    asyncaction(form.Refresh);
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
