@@ -35,17 +35,20 @@
             loadToolStripMenuItem = new ToolStripMenuItem();
             getLiveSolarSystemBtn = new ToolStripMenuItem();
             RunBtn = new ToolStripMenuItem();
+            stopToolStripMenuItem = new ToolStripMenuItem();
+            scaleTypeToolStripMenuItem = new ToolStripMenuItem();
+            logarithmicToolStripMenuItem = new ToolStripMenuItem();
+            linearToolStripMenuItem = new ToolStripMenuItem();
             DateAndTimeLabel = new Label();
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
             idiotbox = new Label();
-            stopToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem, scaleTypeToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(984, 24);
@@ -87,6 +90,34 @@
             RunBtn.Text = "Go!";
             RunBtn.Click += RunBtn_Click;
             // 
+            // stopToolStripMenuItem
+            // 
+            stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            stopToolStripMenuItem.Size = new Size(46, 20);
+            stopToolStripMenuItem.Text = "Stop!";
+            stopToolStripMenuItem.Click += stopToolStripMenuItem_Click;
+            // 
+            // scaleTypeToolStripMenuItem
+            // 
+            scaleTypeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { logarithmicToolStripMenuItem, linearToolStripMenuItem });
+            scaleTypeToolStripMenuItem.Name = "scaleTypeToolStripMenuItem";
+            scaleTypeToolStripMenuItem.Size = new Size(73, 20);
+            scaleTypeToolStripMenuItem.Text = "Scale Type";
+            // 
+            // logarithmicToolStripMenuItem
+            // 
+            logarithmicToolStripMenuItem.Name = "logarithmicToolStripMenuItem";
+            logarithmicToolStripMenuItem.Size = new Size(180, 22);
+            logarithmicToolStripMenuItem.Text = "Logarithmic";
+            logarithmicToolStripMenuItem.Click += logarithmicToolStripMenuItem_Click;
+            // 
+            // linearToolStripMenuItem
+            // 
+            linearToolStripMenuItem.Name = "linearToolStripMenuItem";
+            linearToolStripMenuItem.Size = new Size(180, 22);
+            linearToolStripMenuItem.Text = "Linear";
+            linearToolStripMenuItem.Click += linearToolStripMenuItem_Click;
+            // 
             // DateAndTimeLabel
             // 
             DateAndTimeLabel.AutoSize = true;
@@ -104,13 +135,6 @@
             idiotbox.Size = new Size(190, 15);
             idiotbox.TabIndex = 3;
             idiotbox.Text = "You haven't broken anything, yet...";
-            // 
-            // stopToolStripMenuItem
-            // 
-            stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            stopToolStripMenuItem.Size = new Size(46, 20);
-            stopToolStripMenuItem.Text = "Stop!";
-            stopToolStripMenuItem.Click += stopToolStripMenuItem_Click;
             // 
             // Sim1
             // 
@@ -142,5 +166,8 @@
         private OpenFileDialog openFileDialog1;
         private Label idiotbox;
         private ToolStripMenuItem stopToolStripMenuItem;
+        private ToolStripMenuItem scaleTypeToolStripMenuItem;
+        private ToolStripMenuItem logarithmicToolStripMenuItem;
+        private ToolStripMenuItem linearToolStripMenuItem;
     }
 }

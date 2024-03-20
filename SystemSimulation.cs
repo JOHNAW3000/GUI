@@ -29,7 +29,7 @@ namespace GUI
                 return jsontext;
             }
 
-            public void Run(int timestep, int length, Graphics g, Sim1 form, Action<Action> asyncaction)
+            public void Run(int timestep, int length, Graphics g, Sim1 form, Action<Action> asyncaction, bool uselog)
             {
 
                 int size = 20;
@@ -40,8 +40,15 @@ namespace GUI
 
 
                     List<Body> bodies = PlanetarySystem.GetBodies();
-                    //List<Vector> coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
-                    List<Vector> coordinates = converter.ConvertCoordsLog(PlanetarySystem);
+                    List<Vector> coordinates = new List<Vector>();
+                    if (uselog)
+                    {
+                        coordinates = converter.ConvertCoordsLog(PlanetarySystem);
+                    }
+                    else
+                    {
+                        coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
+                    }
 
                     asyncaction(form.Refresh);
 
@@ -52,7 +59,7 @@ namespace GUI
                         Appearance colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
                         Pen p = new Pen(colours.Primary, 5);
                         Brush b = new SolidBrush(colours.Secondary);
-                        Pen arrow = new Pen(colours.Secondary, 5);
+                        Pen arrow = new Pen(colours.Secondary, 3);
 
 
                         Vector velocity = bodies[bodyindex].Velocity;

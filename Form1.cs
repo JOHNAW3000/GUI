@@ -17,6 +17,8 @@ namespace GUI
 
         private bool running = false;
 
+        private bool uselog = true;
+
         public Sim1()
         {
             InitializeComponent();
@@ -30,7 +32,7 @@ namespace GUI
 
         public void UpdateLabel(string newdate)
         {
-            DateAndTimeLabel.Text = newdate;
+            BeginInvoke(new Action(() => { DateAndTimeLabel.Text = newdate; }));
         }
 
         public DateTime GetDate()
@@ -46,25 +48,29 @@ namespace GUI
 
         private async void RunBtn_Click(object sender, EventArgs e)
         {
-            if (sim == null)
+            if (!running)
             {
-                idiotbox.Text = "No simulation loaded!!!";
-            }
-            else
-            {
-                idiotbox.Text = "All Clear";
-                running = true;
+                if (sim == null)
+                {
+                    idiotbox.Text = "No simulation loaded!!!";
+                }
+                else
+                {
+                    idiotbox.Text = "All Clear";
+                    running = true;
 
-                await Running();   
+                    await Running(sim);
+                }
             }
+
 
         }
 
-        private async Task Running()
+        private async Task Running(SystemSimulation sim)
         {
             while (running)
             {
-                await Task.Run(() => sim.Run(3600 * 24, 5, g, this, UpdateUI));
+                await Task.Run(() => sim.Run(3600 * 24, 5, g, this, UpdateUI, uselog));
             }
         }
 
@@ -76,7 +82,7 @@ namespace GUI
             }
         }
 
-            private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
+        private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
         {
             Sim1.ResetSystem();
             // Create API and force matrix for the simulation
@@ -141,7 +147,7 @@ namespace GUI
             DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
             idiotbox.Text = "All Clear";
 
-            sim.Run(1, 1, g, this, UpdateUI);
+            sim.Run(1, 1, g, this, UpdateUI, uselog);
 
         }
 
@@ -176,7 +182,7 @@ namespace GUI
                     idiotbox.Text = "All Clear";
 
 
-                    sim.Run(1, 1, g, this, UpdateUI);
+                    sim.Run(1, 1, g, this, UpdateUI, uselog);
                 }
                 catch (Exception ex)
                 {
@@ -211,6 +217,16 @@ namespace GUI
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             running = false;
+        }
+
+        private void logarithmicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            uselog = true;
+        }
+
+        private void linearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            uselog = false;
         }
     }
 }
