@@ -43,6 +43,7 @@
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
             idiotbox = new Label();
+            Bodies = new ListBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -107,14 +108,14 @@
             // logarithmicToolStripMenuItem
             // 
             logarithmicToolStripMenuItem.Name = "logarithmicToolStripMenuItem";
-            logarithmicToolStripMenuItem.Size = new Size(180, 22);
+            logarithmicToolStripMenuItem.Size = new Size(138, 22);
             logarithmicToolStripMenuItem.Text = "Logarithmic";
             logarithmicToolStripMenuItem.Click += logarithmicToolStripMenuItem_Click;
             // 
             // linearToolStripMenuItem
             // 
             linearToolStripMenuItem.Name = "linearToolStripMenuItem";
-            linearToolStripMenuItem.Size = new Size(180, 22);
+            linearToolStripMenuItem.Size = new Size(138, 22);
             linearToolStripMenuItem.Text = "Linear";
             linearToolStripMenuItem.Click += linearToolStripMenuItem_Click;
             // 
@@ -136,12 +137,23 @@
             idiotbox.TabIndex = 3;
             idiotbox.Text = "You haven't broken anything, yet...";
             // 
+            // Bodies
+            // 
+            Bodies.FormattingEnabled = true;
+            Bodies.ItemHeight = 15;
+            Bodies.Location = new Point(8, 82);
+            Bodies.Name = "Bodies";
+            Bodies.Size = new Size(190, 49);
+            Bodies.TabIndex = 4;
+            Bodies.SelectedIndexChanged += Bodies_SelectedIndexChanged;
+            // 
             // Sim1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(984, 961);
+            Controls.Add(Bodies);
             Controls.Add(idiotbox);
             Controls.Add(DateAndTimeLabel);
             Controls.Add(menuStrip1);
@@ -169,5 +181,6 @@
         private ToolStripMenuItem scaleTypeToolStripMenuItem;
         private ToolStripMenuItem logarithmicToolStripMenuItem;
         private ToolStripMenuItem linearToolStripMenuItem;
+        private ListBox Bodies;
     }
 }

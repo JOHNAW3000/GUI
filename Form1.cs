@@ -1,6 +1,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using static GUI.Program;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 
 namespace GUI
@@ -86,6 +88,7 @@ namespace GUI
         private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
         {
             Sim1.ResetSystem();
+            Bodies.Items.Clear();
             // Create API and force matrix for the simulation
             HorizonsAPI api = new HorizonsAPI();
 
@@ -145,6 +148,9 @@ namespace GUI
 
 
                 // Add to force matrix
+
+                Bodies.Items.Add(body.Name);
+
                 planetarysystem.AddBody(body);
             }
 
@@ -160,6 +166,8 @@ namespace GUI
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Load simulation
+            Bodies.Items.Clear();
+
             string path;
             openFileDialog1.ShowDialog(this);
             path = openFileDialog1.FileName;
@@ -177,6 +185,8 @@ namespace GUI
                     {
                         Body planet = jsonplanet.ToObject<Body>();
                         newsystem.AddBody(planet);
+                        Bodies.Items.Add(planet.Name);
+
                     }
 
                     DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
@@ -233,6 +243,20 @@ namespace GUI
         private void linearToolStripMenuItem_Click(object sender, EventArgs e)
         {
             uselog = false;
+        }
+
+        private void Bodies_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<Body> bodies = planetarysystem.GetBodies();
+            foreach (Body b in bodies)
+            {
+                if (b.Name == Bodies.SelectedItem.ToString())
+                {
+                    BodyInfo file = new BodyInfo(b);
+                    file.Show();
+                }
+            }
+
         }
     }
 }
