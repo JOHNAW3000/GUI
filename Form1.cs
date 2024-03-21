@@ -23,6 +23,7 @@ namespace GUI
         {
             InitializeComponent();
             this.DoubleBuffered = true;
+            //blit
 
             coordcon = new CoordinateConverter(this.Width, this.Height);
 
@@ -90,7 +91,7 @@ namespace GUI
 
             // Creates a list of planets to loop through
             string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-            //string[] planets = { "Sun", "Earth" };
+            //string[] planets = { "Earth", "Moon" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
 
@@ -135,6 +136,9 @@ namespace GUI
                         break;
                     case "Pluto":
                         body.Colours = new Appearance(Color.PaleTurquoise, Color.Lavender);
+                        break;
+                    case "Moon":
+                        body.Colours = new Appearance(Color.Gray, Color.DarkGray);
                         break;
                 }
 

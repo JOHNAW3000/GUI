@@ -54,6 +54,10 @@ namespace GUI
 
                     for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
                     {
+                        //Point point = new Point(0, 0);
+                        //Size s = new Size(1000, 1000);
+                        //g.CopyFromScreen(point, point, s);
+
 
                         Vector pos = coordinates[bodyindex];
                         Appearance colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
