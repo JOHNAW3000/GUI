@@ -89,10 +89,10 @@ namespace GUI
             HorizonsAPI api = new HorizonsAPI();
 
             // Creates a list of planets to loop through
-            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
+            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
             //string[] planets = { "Sun", "Earth" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
+            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
 
 
             foreach (string planet in planets)
@@ -121,6 +121,8 @@ namespace GUI
                         break;
                     case "Jupiter":
                         body.Colours = new Appearance(Color.Peru, Color.Tan);
+                        //
+                        body.Mass = body.Mass / 1000;
                         break;
                     case "Saturn":
                         body.Colours = new Appearance(Color.DarkKhaki, Color.Khaki);
