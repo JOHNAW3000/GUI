@@ -40,14 +40,14 @@
             velocitytextbox = new TextBox();
             primarytextbox = new TextBox();
             secondarytextbox = new TextBox();
-            button1 = new Button();
+            updatebtn = new Button();
             SuspendLayout();
             // 
             // nametextbox
             // 
             nametextbox.Location = new Point(118, 10);
             nametextbox.Name = "nametextbox";
-            nametextbox.Size = new Size(100, 23);
+            nametextbox.Size = new Size(164, 23);
             nametextbox.TabIndex = 0;
             // 
             // namelabel
@@ -80,7 +80,7 @@
             // velocitylabel
             // 
             velocitylabel.AutoSize = true;
-            velocitylabel.Location = new Point(9, 95);
+            velocitylabel.Location = new Point(9, 96);
             velocitylabel.Name = "velocitylabel";
             velocitylabel.Size = new Size(51, 15);
             velocitylabel.TabIndex = 4;
@@ -89,7 +89,7 @@
             // primarycolourlabel
             // 
             primarycolourlabel.AutoSize = true;
-            primarycolourlabel.Location = new Point(8, 120);
+            primarycolourlabel.Location = new Point(8, 121);
             primarycolourlabel.Name = "primarycolourlabel";
             primarycolourlabel.Size = new Size(90, 15);
             primarycolourlabel.TabIndex = 5;
@@ -98,7 +98,7 @@
             // secondarycolourlabel
             // 
             secondarycolourlabel.AutoSize = true;
-            secondarycolourlabel.Location = new Point(8, 145);
+            secondarycolourlabel.Location = new Point(8, 146);
             secondarycolourlabel.Name = "secondarycolourlabel";
             secondarycolourlabel.Size = new Size(104, 15);
             secondarycolourlabel.TabIndex = 6;
@@ -108,52 +108,53 @@
             // 
             masstextbox.Location = new Point(118, 39);
             masstextbox.Name = "masstextbox";
-            masstextbox.Size = new Size(100, 23);
+            masstextbox.Size = new Size(164, 23);
             masstextbox.TabIndex = 7;
             // 
             // radiustextbox
             // 
             radiustextbox.Location = new Point(118, 65);
             radiustextbox.Name = "radiustextbox";
-            radiustextbox.Size = new Size(100, 23);
+            radiustextbox.Size = new Size(164, 23);
             radiustextbox.TabIndex = 8;
             // 
             // velocitytextbox
             // 
-            velocitytextbox.Location = new Point(118, 92);
+            velocitytextbox.Location = new Point(118, 93);
             velocitytextbox.Name = "velocitytextbox";
-            velocitytextbox.Size = new Size(100, 23);
+            velocitytextbox.Size = new Size(164, 23);
             velocitytextbox.TabIndex = 9;
             // 
             // primarytextbox
             // 
-            primarytextbox.Location = new Point(118, 117);
+            primarytextbox.Location = new Point(118, 118);
             primarytextbox.Name = "primarytextbox";
-            primarytextbox.Size = new Size(100, 23);
+            primarytextbox.Size = new Size(164, 23);
             primarytextbox.TabIndex = 10;
             // 
             // secondarytextbox
             // 
-            secondarytextbox.Location = new Point(118, 142);
+            secondarytextbox.Location = new Point(118, 143);
             secondarytextbox.Name = "secondarytextbox";
-            secondarytextbox.Size = new Size(100, 23);
+            secondarytextbox.Size = new Size(164, 23);
             secondarytextbox.TabIndex = 11;
             // 
-            // button1
+            // updatebtn
             // 
-            button1.Location = new Point(98, 179);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 12;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
+            updatebtn.Location = new Point(98, 180);
+            updatebtn.Name = "updatebtn";
+            updatebtn.Size = new Size(75, 23);
+            updatebtn.TabIndex = 12;
+            updatebtn.Text = "Update";
+            updatebtn.UseVisualStyleBackColor = true;
+            updatebtn.Click += updatebtn_Click;
             // 
             // BodyInfo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(308, 214);
-            Controls.Add(button1);
+            ClientSize = new Size(308, 213);
+            Controls.Add(updatebtn);
             Controls.Add(secondarytextbox);
             Controls.Add(primarytextbox);
             Controls.Add(velocitytextbox);
@@ -186,6 +187,6 @@
         private TextBox velocitytextbox;
         private TextBox primarytextbox;
         private TextBox secondarytextbox;
-        private Button button1;
+        private Button updatebtn;
     }
 }

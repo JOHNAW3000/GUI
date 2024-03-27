@@ -8,7 +8,7 @@ namespace GUI
         // Properties
 
         private string name;
-        private string ID;
+        private string id;
         private double mass;
         private double radius;
         private Vector position;
@@ -23,7 +23,7 @@ namespace GUI
         public Body(string name, string id, double mass, double radius, Vector position, Vector velocity)
         {
             this.name = name;
-            this.ID = id;
+            this.id = id;
             this.mass = mass;
             this.radius = radius;
             this.position = position;
@@ -38,10 +38,22 @@ namespace GUI
             get { return name; }
             set { name = value; }
         }
+
+        public string ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
         public double Mass
         {
             get { return mass; }
             set { mass = value; }
+        }
+
+        public double Radius
+        {
+            get { return radius; }
+            set { radius = value; }
         }
 
         public Vector Position

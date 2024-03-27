@@ -1,8 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics;
 using static GUI.Program;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 
 namespace GUI
@@ -248,15 +246,35 @@ namespace GUI
         private void Bodies_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<Body> bodies = planetarysystem.GetBodies();
+            Body selectedbody = null;
             foreach (Body b in bodies)
             {
                 if (b.Name == Bodies.SelectedItem.ToString())
                 {
-                    BodyInfo file = new BodyInfo(b);
-                    file.Show();
+                    selectedbody = b;
                 }
             }
 
+            BodyInfo file = new BodyInfo(selectedbody, this);
+            file.Show();
+
         }
+
+        public void UpdateBody(Body oldbody, Body newbody)
+        {
+            List<Body> bodies = planetarysystem.GetBodies();
+            int index = 0;
+            int i = 0;
+            foreach (Body b in bodies)
+            {
+                if (b == oldbody)
+                {
+                    index = i;
+                }
+                i++;
+            }
+            planetarysystem.ReplaceBody(newbody, index);
+        }
+
     }
 }

@@ -37,7 +37,8 @@ namespace GUI
                 for (int i = 0; i < length; i++)
                 {
 
-
+                    BufferedGraphicsContext context;
+                    context = new BufferedGraphicsContext();
 
                     List<Body> bodies = PlanetarySystem.GetBodies();
                     List<Vector> coordinates = new List<Vector>();
@@ -84,6 +85,7 @@ namespace GUI
                     datetime = datetime.AddSeconds(timestep);
                     form.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
 
+                    context.Dispose();
 
                     // make this consistent
                     //Thread.Sleep(10);
