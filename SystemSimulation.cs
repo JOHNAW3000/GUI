@@ -7,19 +7,30 @@ namespace GUI
         public class SystemSimulation
         {
             // Properties
-            AdjacencyMatrix PlanetarySystem;
-            CoordinateConverter converter;
+            private AdjacencyMatrix planetarysystem;
+            private DateTime date;
+            private SimulationDisplay display;
 
             // Constructor
-            public SystemSimulation(AdjacencyMatrix forces, CoordinateConverter converter)
+            public SystemSimulation(AdjacencyMatrix forces, DateTime date)
             {
-                this.PlanetarySystem = forces;
-                this.converter = converter;
+                this.planetarysystem = forces;
+                this.date = date;
             }
 
 
             // Methods
 
+            public AdjacencyMatrix PlanetarySystem
+            {
+                get { return planetarysystem; }
+                set { planetarysystem = value; }
+            }
+            public DateTime Date
+            {
+                get { return date; }
+                set { date = value; }
+            }
             public string SaveSim()
             {
                 List<Body> bodies = PlanetarySystem.GetBodies();
@@ -29,74 +40,27 @@ namespace GUI
                 return jsontext;
             }
 
-            public void Run(int timestep, int length, Graphics g, SimulationDisplay form, Action<Action> asyncaction, bool uselog)
+            public void Run(int timestep, Graphics g, SimulationDisplay form)
             {
 
-                int size = 20;
+                form.DrawStep(planetarysystem.GetBodies());
 
-                for (int i = 0; i < length; i++)
-                {
+                this.Step(timestep);
 
-                    //BufferedGraphicsContext context;
-                    //context = new BufferedGraphicsContext();
-
-                    List<Body> bodies = PlanetarySystem.GetBodies();
-                    List<Vector> coordinates = new List<Vector>();
-                    if (uselog)
-                    {
-                        coordinates = converter.ConvertCoordsLog(PlanetarySystem);
-                    }
-                    else
-                    {
-                        coordinates = converter.ConvertCoordsScalar(PlanetarySystem, 0.000001);
-                    }
-
-                    asyncaction(form.Refresh);
-
-                    for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
-                    {
-                        //Point point = new Point(0, 0);
-                        //Size s = new Size(1000, 1000);
-                        //g.CopyFromScreen(point, point, s);
+                DateTime datetime = form.GetDate();
+                datetime = datetime.AddSeconds(timestep);
+                form.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
 
 
-                        Vector pos = coordinates[bodyindex];
-                        Appearance colours = PlanetarySystem.GetBodies()[bodyindex].Colours;
-                        Pen p = new Pen(colours.Primary, 5);
-                        Brush b = new SolidBrush(colours.Secondary);
-                        Pen arrow = new Pen(colours.Secondary, 3);
-
-
-                        Vector velocity = bodies[bodyindex].Velocity;
-                        float startx = (float)pos.X;
-                        float starty = (float)pos.Y;
-                        float endx = (float)pos.Add(velocity).X;
-                        float endy = (float)pos.Add(velocity).Y;
-                        g.DrawLine(arrow, startx, starty, endx, endy);
-
-
-                        g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
-                        g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
-                    }
-
-                    this.Step(timestep);
-
-                    DateTime datetime = form.GetDate();
-                    datetime = datetime.AddSeconds(timestep);
-                    form.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
-
-                    //context.Dispose();
-
-                    // make this consistent
-                    //Thread.Sleep(10);
-                }
+                // make this consistent
+                //Thread.Sleep(10);
             }
 
 
-            private void Step(int timestep)
+
+            public void Step(int timestep)
             {
-                //PlanetarySystem.Update();
-                List<Body> bodies = PlanetarySystem.GetBodies();
+                List<Body> bodies = planetarysystem.GetBodies();
 
                 for (int i = 0; i < bodies.Count; i++)
                 {
@@ -108,7 +72,7 @@ namespace GUI
                     {
                         double mass = body.Mass;
 
-                        Vector resultant = PlanetarySystem.Resultant(i);
+                        Vector resultant = planetarysystem.Resultant(i);
 
                         Vector acceleration = resultant.Scale(1 / mass);
 
@@ -132,9 +96,9 @@ namespace GUI
                         // Calculate new velocity
 
                         body.Position = newpos;
-                        PlanetarySystem.ReplaceBody(body, i);
+                        planetarysystem.ReplaceBody(body, i);
 
-                        PlanetarySystem.SingleBodyUpdate(i);
+                        planetarysystem.SingleBodyUpdate(i);
 
                         resultant = PlanetarySystem.Resultant(i);
                         //resultant.Data();
@@ -153,7 +117,7 @@ namespace GUI
                         //Debug.WriteLine($"newVelocity of {body.Name}");
                         //body.Velocity.Data();
 
-                        PlanetarySystem.ReplaceBody(body, i);
+                        planetarysystem.ReplaceBody(body, i);
                     }
 
                 }
@@ -213,8 +177,8 @@ namespace GUI
 
 
         }
-
-
-
     }
+
+
+
 }

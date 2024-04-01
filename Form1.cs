@@ -1,5 +1,4 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Windows.Forms;
 using static GUI.Program;
 
 
@@ -8,7 +7,6 @@ namespace GUI
     public partial class SimulationDisplay : Form
     {
 
-        private static AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
         private CoordinateConverter coordcon;
 
         private SystemSimulation sim;
@@ -31,6 +29,44 @@ namespace GUI
 
         }
 
+        public void DrawStep(List<Body> bodies)
+        {
+            int size = 20;
+
+            List<Vector> coordinates;
+            if (uselog)
+            {
+                coordinates = coordcon.ConvertCoordsLog(sim.PlanetarySystem);
+            }
+            else
+            {
+                coordinates = coordcon.ConvertCoordsScalar(sim.PlanetarySystem, 0.000001);
+            }
+
+            this.Invalidate();
+
+
+            for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
+            {
+
+
+                Vector pos = coordinates[bodyindex];
+                Appearance colours = bodies[bodyindex].Colours;
+                Pen p = new Pen(colours.Primary, 5);
+                Brush b = new SolidBrush(colours.Secondary);
+                Pen arrow = new Pen(colours.Secondary, 3);
+
+
+                Vector velocity = bodies[bodyindex].Velocity;
+                float startx = (float)pos.X;
+                float starty = (float)pos.Y;
+                float endx = (float)pos.Add(velocity).X;
+                float endy = (float)pos.Add(velocity).Y;
+                g.DrawLine(arrow, startx, starty, endx, endy);
+                g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+                g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+            }
+        }
         public void UpdateLabel(string newdate)
         {
             BeginInvoke(new Action(() => { DateAndTimeLabel.Text = newdate; }));
@@ -40,13 +76,6 @@ namespace GUI
         {
             return Convert.ToDateTime(DateAndTimeLabel.Text);
         }
-
-        private static void ResetSystem()
-        {
-            planetarysystem = new AdjacencyMatrix();
-        }
-
-
         private async void RunBtn_Click(object sender, EventArgs e)
         {
             if (!running)
@@ -60,18 +89,26 @@ namespace GUI
                     idiotbox.Text = "All Clear";
                     running = true;
 
-                    await Running(sim);
+                    await Running();
                 }
             }
 
 
         }
 
-        private async Task Running(SystemSimulation sim)
+        private async Task Running()
         {
+            int timestep = 3600 * 24;
             while (running)
             {
-                await Task.Run(() => sim.Run(3600 * 24, 5, g, this, UpdateUI, uselog));
+                await Task.Run(() =>
+                {
+                    sim.Step(timestep);
+                    this.DrawStep(sim.PlanetarySystem.GetBodies());
+                    DateTime datetime = this.GetDate();
+                    datetime = datetime.AddSeconds(timestep);
+                    this.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
+                });
             }
         }
 
@@ -85,15 +122,14 @@ namespace GUI
 
         private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
         {
-            SimulationDisplay.ResetSystem();
             Bodies.Items.Clear();
 
-            sim = GetLiveSolarSystem(coordcon);
+            sim = GetLiveSolarSystem();
 
             DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            idiotbox.Text = "All Clear";
+            idiotbox.Text = "Loaded Successfully";
 
-            sim.Run(1, 1, g, this, UpdateUI, uselog);
+            //sim.Run(1, 1, g, this, UpdateUI, uselog, coordcon);
 
         }
 
@@ -107,37 +143,20 @@ namespace GUI
             path = openFileDialog1.FileName;
             if (path != null & path != "")
             {
-                string jsontext = File.ReadAllText(path);
                 try
                 {
-                    JObject jsoncomplete = JObject.Parse(jsontext);
-                    JArray jsonplanets = (JArray)jsoncomplete["Planets"];
-                    string jsondate = jsoncomplete["Date"].ToString();
-
-                    AdjacencyMatrix newsystem = new AdjacencyMatrix();
-                    foreach (JToken jsonplanet in jsonplanets)
-                    {
-                        Body planet = jsonplanet.ToObject<Body>();
-                        newsystem.AddBody(planet);
-                        Bodies.Items.Add(planet.Name);
-
-                    }
-
-                    DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
-                    DateAndTimeLabel.Text = date.ToString("yyyy-MM-dd");
-
-                    SimulationDisplay.ResetSystem();
-                    planetarysystem = newsystem;
-                    sim = new SystemSimulation(planetarysystem, coordcon);
-                    idiotbox.Text = "All Clear";
-
-
-                    sim.Run(1, 1, g, this, UpdateUI, uselog);
+                    sim = LoadSimulation(path);
                 }
                 catch (Exception ex)
                 {
                     idiotbox.Text = "Invalid simulation file!!!";
                 }
+
+
+
+
+                DateAndTimeLabel.Text = sim.Date.ToString("yyyy-MM-dd");
+
             }
         }
 
@@ -155,11 +174,7 @@ namespace GUI
 
                 if (path != null & path != "")
                 {
-                    string jsonfile = sim.SaveSim();
-                    JObject jsoncomplete = new JObject();
-                    jsoncomplete["Planets"] = JArray.Parse(jsonfile);
-                    jsoncomplete["Date"] = JsonConvert.SerializeObject(GetDate());
-                    File.WriteAllText(path, jsoncomplete.ToString());
+                    SaveSimulation(sim, path);
                 }
             }
         }
@@ -181,7 +196,7 @@ namespace GUI
 
         private void Bodies_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<Body> bodies = planetarysystem.GetBodies();
+            List<Body> bodies = sim.PlanetarySystem.GetBodies();
             Body selectedbody = null;
             foreach (Body b in bodies)
             {
@@ -198,7 +213,7 @@ namespace GUI
 
         public void UpdateBody(Body oldbody, Body newbody)
         {
-            List<Body> bodies = planetarysystem.GetBodies();
+            List<Body> bodies = sim.PlanetarySystem.GetBodies();
             int index = 0;
             int i = 0;
             foreach (Body b in bodies)
@@ -209,7 +224,7 @@ namespace GUI
                 }
                 i++;
             }
-            planetarysystem.ReplaceBody(newbody, index);
+            sim.PlanetarySystem.ReplaceBody(newbody, index);
         }
 
     }

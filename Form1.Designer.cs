@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimulationDisplay));
             menuStrip1 = new MenuStrip();
             FileMenu = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
@@ -147,18 +146,19 @@
             Bodies.TabIndex = 4;
             Bodies.SelectedIndexChanged += Bodies_SelectedIndexChanged;
             // 
-            // Sim1
+            // SimulationDisplay
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            ClientSize = new Size(984, 961);
+            BackColor = Color.Black;
+            ClientSize = new Size(984, 749);
             Controls.Add(Bodies);
             Controls.Add(idiotbox);
             Controls.Add(DateAndTimeLabel);
             Controls.Add(menuStrip1);
+            ForeColor = Color.Cornsilk;
             MainMenuStrip = menuStrip1;
-            Name = "Sim1";
+            Name = "SimulationDisplay";
             Text = "Simulation - 1";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();

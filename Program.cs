@@ -1,21 +1,20 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.IO;
+
 namespace GUI
 {
     internal static partial class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new SimulationDisplay());
         }
 
 
-        public static SystemSimulation GetLiveSolarSystem(CoordinateConverter coordcon)
+        public static SystemSimulation GetLiveSolarSystem()
         {
             HorizonsAPI api = new HorizonsAPI();
             AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
@@ -80,10 +79,42 @@ namespace GUI
                 planetarysystem.AddBody(body);
             }
 
+            DateTime date = DateTime.Today;
 
-            SystemSimulation sim = new SystemSimulation(planetarysystem, coordcon);
+            SystemSimulation sim = new SystemSimulation(planetarysystem, date);
             return sim;
 
         }
+
+        public static SystemSimulation LoadSimulation(string path)
+        {
+            string jsontext = File.ReadAllText(path);
+
+            JObject jsoncompletefile = JObject.Parse(jsontext);
+            JArray jsonplanets = (JArray)jsoncompletefile["Planets"];
+            string jsondate = jsoncompletefile["Date"].ToString();
+
+            AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
+            foreach (JToken jsonplanet in jsonplanets)
+            {
+                Body planet = jsonplanet.ToObject<Body>();
+                planetarysystem.AddBody(planet);
+            }
+
+            DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
+
+            SystemSimulation sim = new SystemSimulation(planetarysystem, date);
+            return sim;
+        }
+
+        public static void SaveSimulation(SystemSimulation sim, string path)
+        {
+            string jsonfile = sim.SaveSim();
+            JObject jsoncomplete = new JObject();
+            jsoncomplete["Planets"] = JArray.Parse(jsonfile);
+            jsoncomplete["Date"] = JsonConvert.SerializeObject(sim.Date);
+            File.WriteAllText(path, jsoncomplete.ToString());
+        }
+
     }
 }
