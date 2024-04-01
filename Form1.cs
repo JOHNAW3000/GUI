@@ -5,7 +5,7 @@ using static GUI.Program;
 
 namespace GUI
 {
-    public partial class Sim1 : Form
+    public partial class SimulationDisplay : Form
     {
 
         private static AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
@@ -19,7 +19,7 @@ namespace GUI
 
         private bool uselog = true;
 
-        public Sim1()
+        public SimulationDisplay()
         {
             InitializeComponent();
             this.DoubleBuffered = true;
@@ -85,75 +85,11 @@ namespace GUI
 
         private void getLiveSolarSystemBtn_Click(object sender, EventArgs e)
         {
-            Sim1.ResetSystem();
+            SimulationDisplay.ResetSystem();
             Bodies.Items.Clear();
-            // Create API and force matrix for the simulation
-            HorizonsAPI api = new HorizonsAPI();
 
-            // Creates a list of planets to loop through
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-            //string[] planets = { "Earth", "Moon" };
-            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
-            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
+            sim = GetLiveSolarSystem(coordcon);
 
-
-            foreach (string planet in planets)
-            {
-
-                // Creates a body from each API response
-                Body body = api.ParseAPIResponse(planet);
-
-                switch (body.Name)
-                {
-                    case "Sun":
-                        body.Colours = new Appearance(Color.OrangeRed, Color.Yellow);
-                        body.IsStar = true;
-                        break;
-                    case "Mercury":
-                        body.Colours = new Appearance(Color.Gray, Color.DarkGray);
-                        break;
-                    case "Venus":
-                        body.Colours = new Appearance(Color.DarkOrange, Color.Chocolate);
-                        break;
-                    case "Earth":
-                        body.Colours = new Appearance(Color.SpringGreen, Color.SteelBlue);
-                        break;
-                    case "Mars":
-                        body.Colours = new Appearance(Color.Firebrick, Color.Tomato);
-                        break;
-                    case "Jupiter":
-                        body.Colours = new Appearance(Color.Peru, Color.Tan);
-                        //
-                        body.Mass = body.Mass / 1000;
-                        break;
-                    case "Saturn":
-                        body.Colours = new Appearance(Color.DarkKhaki, Color.Khaki);
-                        break;
-                    case "Neptune":
-                        body.Colours = new Appearance(Color.LightSkyBlue, Color.LightCyan);
-                        break;
-                    case "Uranus":
-                        body.Colours = new Appearance(Color.RoyalBlue, Color.SlateBlue);
-                        break;
-                    case "Pluto":
-                        body.Colours = new Appearance(Color.PaleTurquoise, Color.Lavender);
-                        break;
-                    case "Moon":
-                        body.Colours = new Appearance(Color.Gray, Color.DarkGray);
-                        break;
-                }
-
-
-
-                // Add to force matrix
-
-                Bodies.Items.Add(body.Name);
-
-                planetarysystem.AddBody(body);
-            }
-
-
-            sim = new SystemSimulation(planetarysystem, coordcon, this);
             DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
             idiotbox.Text = "All Clear";
 
@@ -190,9 +126,9 @@ namespace GUI
                     DateTime date = JsonConvert.DeserializeObject<DateTime>(jsondate);
                     DateAndTimeLabel.Text = date.ToString("yyyy-MM-dd");
 
-                    Sim1.ResetSystem();
+                    SimulationDisplay.ResetSystem();
                     planetarysystem = newsystem;
-                    sim = new SystemSimulation(planetarysystem, coordcon, this);
+                    sim = new SystemSimulation(planetarysystem, coordcon);
                     idiotbox.Text = "All Clear";
 
 

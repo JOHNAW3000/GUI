@@ -67,28 +67,32 @@ namespace GUI
                         }
                         else
                         {
-                            Body a = bodies[i];
-                            Body b = bodies[j];
-                            double masses = a.Mass * b.Mass;
-                            Vector rvector = a.Position.VectorTo(b.Position);
-                            //Convert to m from km
-                            rvector = rvector.Scale(1000);
-                            double rmod = rvector.Modulus();
-                            //Debug.WriteLine($"Distance between {a.Name} and {b.Name} = {rmod}");
-                            double rsquared = Math.Pow(rmod, 2);
-                            // Calculate Unit vector of r
-                            Vector runit = rvector.Unit();
-                            // Calculate scalar coefficient
-                            double scalarcoefficient = (G * masses) / rsquared;
-                            // Force
-                            Vector force = runit.Scale(scalarcoefficient);
-                            //Console.WriteLine($"bodies.Count: {bodies.Count}, i: {i}, j: {j}");
-                            edges[i][j] = force;
+                           //Console.WriteLine($"bodies.Count: {bodies.Count}, i: {i}, j: {j
+                            edges[i][j] = CalculateForce(i, j);
                         }
 
                     }
                 }
 
+            }
+
+            public void SingleBodyUpdate(int index)
+            {
+                for (int columnindex = 0; columnindex < bodies.Count; columnindex++)
+                {
+                    if (index == columnindex)
+                    {
+                        edges[columnindex][index] = new Vector(0, 0);
+                    }
+                    else
+                    {
+                        Vector force = CalculateForce(columnindex, index);
+                        //Debug.WriteLine($"index {index}, columnindex {columnindex}");
+                        //force.Data();
+                        edges[columnindex][index] = force;
+                    }
+                    
+                }
             }
 
             public Vector Resultant(int index)
@@ -103,6 +107,26 @@ namespace GUI
                 //Debug.WriteLine($"Force on {bodies[index].Name}: {resultantforce.Modulus()}");
                 return resultantforce;
 
+            }
+
+            private Vector CalculateForce(int i, int j)
+            {
+                Body a = bodies[i];
+                Body b = bodies[j];
+                double masses = a.Mass * b.Mass;
+                Vector rvector = a.Position.VectorTo(b.Position);
+                //Convert to m from km
+                rvector = rvector.Scale(1000);
+                double rmod = rvector.Modulus();
+                //Debug.WriteLine($"Distance between {a.Name} and {b.Name} = {rmod}");
+                double rsquared = Math.Pow(rmod, 2);
+                // Calculate Unit vector of r
+                Vector runit = rvector.Unit();
+                // Calculate scalar coefficient
+                double scalarcoefficient = (G * masses) / rsquared;
+                // Force
+                Vector force = runit.Scale(scalarcoefficient);
+                return force;
             }
 
             public void Data()

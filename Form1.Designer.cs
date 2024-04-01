@@ -1,6 +1,6 @@
 ﻿namespace GUI
 {
-    partial class Sim1
+    partial class SimulationDisplay
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Sim1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimulationDisplay));
             menuStrip1 = new MenuStrip();
             FileMenu = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();

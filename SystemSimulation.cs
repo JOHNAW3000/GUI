@@ -11,7 +11,7 @@ namespace GUI
             CoordinateConverter converter;
 
             // Constructor
-            public SystemSimulation(AdjacencyMatrix forces, CoordinateConverter converter, Form form)
+            public SystemSimulation(AdjacencyMatrix forces, CoordinateConverter converter)
             {
                 this.PlanetarySystem = forces;
                 this.converter = converter;
@@ -29,7 +29,7 @@ namespace GUI
                 return jsontext;
             }
 
-            public void Run(int timestep, int length, Graphics g, Sim1 form, Action<Action> asyncaction, bool uselog)
+            public void Run(int timestep, int length, Graphics g, SimulationDisplay form, Action<Action> asyncaction, bool uselog)
             {
 
                 int size = 20;
@@ -37,8 +37,8 @@ namespace GUI
                 for (int i = 0; i < length; i++)
                 {
 
-                    BufferedGraphicsContext context;
-                    context = new BufferedGraphicsContext();
+                    //BufferedGraphicsContext context;
+                    //context = new BufferedGraphicsContext();
 
                     List<Body> bodies = PlanetarySystem.GetBodies();
                     List<Vector> coordinates = new List<Vector>();
@@ -85,7 +85,7 @@ namespace GUI
                     datetime = datetime.AddSeconds(timestep);
                     form.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
 
-                    context.Dispose();
+                    //context.Dispose();
 
                     // make this consistent
                     //Thread.Sleep(10);
@@ -95,7 +95,7 @@ namespace GUI
 
             private void Step(int timestep)
             {
-                PlanetarySystem.Update();
+                //PlanetarySystem.Update();
                 List<Body> bodies = PlanetarySystem.GetBodies();
 
                 for (int i = 0; i < bodies.Count; i++)
@@ -104,60 +104,58 @@ namespace GUI
                     // Now using Verlet method
 
                     Body body = bodies[i];
-                    double mass = body.Mass;
-
-                    Vector resultant = PlanetarySystem.Resultant(i);
-
-                    Vector acceleration = resultant.Scale(1 / mass);
-
-                    //Debug.WriteLine($"Acceleration of {body.Name}");
-                    //acceleration.Data();
-
-                    Vector position = body.Position;
-                    position = position.Scale(1000);
-
-                    Vector velocity = body.Velocity;
-                    velocity = velocity.Scale(1000);
-
-
-                    // Calculate new position
-                    Vector newpos = new Vector(0, 0);
-
                     if (!body.IsStar)
                     {
+                        double mass = body.Mass;
+
+                        Vector resultant = PlanetarySystem.Resultant(i);
+
+                        Vector acceleration = resultant.Scale(1 / mass);
+
+                        //Debug.WriteLine($"Acceleration of {body.Name}");
+                        //acceleration.Data();
+
+                        Vector position = body.Position;
+                        position = position.Scale(1000);
+
+                        Vector velocity = body.Velocity;
+                        velocity = velocity.Scale(1000);
+
+
+                        // Calculate new position
+                        Vector newpos = new Vector(0, 0);
+
+
                         newpos = deltaPosition(position, velocity, acceleration, timestep);
+
+
+                        // Calculate new velocity
+
+                        body.Position = newpos;
+                        PlanetarySystem.ReplaceBody(body, i);
+
+                        PlanetarySystem.SingleBodyUpdate(i);
+
+                        resultant = PlanetarySystem.Resultant(i);
+                        //resultant.Data();
+                        Vector newacceleration = resultant.Scale(1 / mass);
+
+                        Vector newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
+
+
+
+                        // Outputs and checks
+
+                        // Debug.WriteLine($"Velocity of {body.Name}");
+                        //body.Velocity.Data();
+
+                        body.Velocity = newvelocity;
+                        //Debug.WriteLine($"newVelocity of {body.Name}");
+                        //body.Velocity.Data();
+
+                        PlanetarySystem.ReplaceBody(body, i);
                     }
 
-                    // Calculate new velocity
-
-                    body.Position = newpos;
-                    PlanetarySystem.ReplaceBody(body, i);
-                    PlanetarySystem.Update();
-
-                    resultant = PlanetarySystem.Resultant(i);
-                    Vector newacceleration = resultant.Scale(1 / mass);
-
-
-                    Vector newvelocity = new Vector(0, 0);
-
-                    if (!body.IsStar)
-                    {
-                        newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
-
-                    }
-
-
-                    // Outputs and checks
-
-                    // Debug.WriteLine($"Velocity of {body.Name}");
-                    //body.Velocity.Data();
-
-                    body.Velocity = newvelocity;
-                    //Debug.WriteLine($"newVelocity of {body.Name}");
-                    //body.Velocity.Data();
-
-
-                    PlanetarySystem.ReplaceBody(body, i);
                 }
 
                 //PlanetarySystem.Data();

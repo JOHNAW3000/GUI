@@ -13,8 +13,8 @@ namespace GUI
     public partial class BodyInfo : Form
     {
         private Body body;
-        private Sim1 form;
-        public BodyInfo(Body b, Sim1 form)
+        private SimulationDisplay form;
+        public BodyInfo(Body b, SimulationDisplay form)
         {
             InitializeComponent();
             this.body = b;
