@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+using System.Diagnostics;
 using static GUI.Program;
 
 
@@ -21,7 +21,6 @@ namespace GUI
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-            //blit
 
             coordcon = new CoordinateConverter(this.Width, this.Height);
 
@@ -31,6 +30,10 @@ namespace GUI
 
         public void DrawStep(List<Body> bodies)
         {
+            Bitmap buffer = new Bitmap(this.Width, this.Height);
+            Graphics buffer_g = Graphics.FromImage(buffer);
+            buffer_g.Clear(Color.Black);
+
             int size = 20;
 
             List<Vector> coordinates;
@@ -43,13 +46,9 @@ namespace GUI
                 coordinates = coordcon.ConvertCoordsScalar(sim.PlanetarySystem, 0.000001);
             }
 
-            this.Invalidate();
-
 
             for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
             {
-
-
                 Vector pos = coordinates[bodyindex];
                 Appearance colours = bodies[bodyindex].Colours;
                 Pen p = new Pen(colours.Primary, 5);
@@ -62,14 +61,23 @@ namespace GUI
                 float starty = (float)pos.Y;
                 float endx = (float)pos.Add(velocity).X;
                 float endy = (float)pos.Add(velocity).Y;
-                g.DrawLine(arrow, startx, starty, endx, endy);
-                g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
-                g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+                buffer_g.DrawLine(arrow, startx, starty, endx, endy);
+                buffer_g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+                buffer_g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
             }
+
+            g.DrawImage(buffer, 0, 0);
         }
         public void UpdateLabel(string newdate)
         {
             BeginInvoke(new Action(() => { DateAndTimeLabel.Text = newdate; }));
+        }
+
+        private void ReplaceSimulation(SystemSimulation simulation)
+        {
+            sim = simulation;
+            Bodies.Items.Clear();
+
         }
 
         public DateTime GetDate()
@@ -88,6 +96,8 @@ namespace GUI
                 {
                     idiotbox.Text = "All Clear";
                     running = true;
+                    this.DrawStep(sim.PlanetarySystem.GetBodies());
+
 
                     await Running();
                 }
@@ -99,24 +109,27 @@ namespace GUI
         private async Task Running()
         {
             int timestep = 3600 * 24;
+            DateTime lastupdated = DateTime.Now;
+
             while (running)
             {
+                double timesincelastupdate = (DateTime.Now - lastupdated).TotalMilliseconds;
+
+                if (timesincelastupdate >= (1000 / 60))
+                {
+                    this.DrawStep(sim.PlanetarySystem.GetBodies());
+                    lastupdated = DateTime.Now;
+                }
                 await Task.Run(() =>
                 {
                     sim.Step(timestep);
-                    this.DrawStep(sim.PlanetarySystem.GetBodies());
+                    Debug.WriteLine(timesincelastupdate);
+
+
                     DateTime datetime = this.GetDate();
                     datetime = datetime.AddSeconds(timestep);
                     this.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
                 });
-            }
-        }
-
-        private void UpdateUI(Action action)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(action);
             }
         }
 
