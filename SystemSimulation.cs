@@ -40,6 +40,11 @@ namespace GUI
                 return jsontext;
             }
 
+            public List<Body> GetBodies()
+            {
+                return PlanetarySystem.GetBodies();
+            }
+
             /*public void Run(int timestep, Graphics g, SimulationDisplay form)
             {
 

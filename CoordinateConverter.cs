@@ -62,7 +62,9 @@
 
                     if (magnitude != 0)
                     {
-                        magnitude = Math.Log(magnitude, logbase);
+                        //magnitude = Math.Log(magnitude, logbase);
+                        magnitude = Math.Pow(magnitude / 5E9, 1 / 3f) * height * 0.9 * 0.5;
+
                         coordinate = direction.Scale(magnitude);
                         coordinate = coordinate.Add(centre);
                     }

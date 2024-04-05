@@ -31,12 +31,12 @@
             nametextbox = new TextBox();
             namelabel = new Label();
             masslabel = new Label();
-            radiuslabel = new Label();
+            positionlabel = new Label();
             velocitylabel = new Label();
             primarycolourlabel = new Label();
             secondarycolourlabel = new Label();
             masstextbox = new TextBox();
-            radiustextbox = new TextBox();
+            positiontextbox = new TextBox();
             velocitytextbox = new TextBox();
             primarytextbox = new TextBox();
             secondarytextbox = new TextBox();
@@ -68,14 +68,14 @@
             masslabel.TabIndex = 2;
             masslabel.Text = "Mass:";
             // 
-            // radiuslabel
+            // positionlabel
             // 
-            radiuslabel.AutoSize = true;
-            radiuslabel.Location = new Point(9, 68);
-            radiuslabel.Name = "radiuslabel";
-            radiuslabel.Size = new Size(45, 15);
-            radiuslabel.TabIndex = 3;
-            radiuslabel.Text = "Radius:";
+            positionlabel.AutoSize = true;
+            positionlabel.Location = new Point(9, 68);
+            positionlabel.Name = "positionlabel";
+            positionlabel.Size = new Size(84, 15);
+            positionlabel.TabIndex = 3;
+            positionlabel.Text = "Orbital Radius:";
             // 
             // velocitylabel
             // 
@@ -111,12 +111,12 @@
             masstextbox.Size = new Size(164, 23);
             masstextbox.TabIndex = 7;
             // 
-            // radiustextbox
+            // positiontextbox
             // 
-            radiustextbox.Location = new Point(118, 65);
-            radiustextbox.Name = "radiustextbox";
-            radiustextbox.Size = new Size(164, 23);
-            radiustextbox.TabIndex = 8;
+            positiontextbox.Location = new Point(118, 65);
+            positiontextbox.Name = "positiontextbox";
+            positiontextbox.Size = new Size(164, 23);
+            positiontextbox.TabIndex = 8;
             // 
             // velocitytextbox
             // 
@@ -158,12 +158,12 @@
             Controls.Add(secondarytextbox);
             Controls.Add(primarytextbox);
             Controls.Add(velocitytextbox);
-            Controls.Add(radiustextbox);
+            Controls.Add(positiontextbox);
             Controls.Add(masstextbox);
             Controls.Add(secondarycolourlabel);
             Controls.Add(primarycolourlabel);
             Controls.Add(velocitylabel);
-            Controls.Add(radiuslabel);
+            Controls.Add(positionlabel);
             Controls.Add(masslabel);
             Controls.Add(namelabel);
             Controls.Add(nametextbox);
@@ -178,12 +178,12 @@
         private TextBox nametextbox;
         private Label namelabel;
         private Label masslabel;
-        private Label radiuslabel;
+        private Label positionlabel;
         private Label velocitylabel;
         private Label primarycolourlabel;
         private Label secondarycolourlabel;
         private TextBox masstextbox;
-        private TextBox radiustextbox;
+        private TextBox positiontextbox;
         private TextBox velocitytextbox;
         private TextBox primarytextbox;
         private TextBox secondarytextbox;

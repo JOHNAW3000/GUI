@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using static GUI.Program;
 
 
@@ -11,6 +12,7 @@ namespace GUI
         private SystemSimulation sim;
 
         private Graphics g;
+        private Bitmap buffer;
 
         private bool running = false;
 
@@ -23,13 +25,21 @@ namespace GUI
         public SimulationDisplay()
         {
             InitializeComponent();
-            this.DoubleBuffered = true;
+            //DoubleBuffered = true;
 
-            coordcon = new CoordinateConverter(this.Width, this.Height);
+            g = CreateGraphics();
+            buffer = new Bitmap(Width, Height);
+            
 
-            g = this.CreateGraphics();
+            coordcon = new CoordinateConverter(Width, Height);
+            sim = GetLiveSolarSystem();
+            DateAndTimeLabel.Text = sim.Date.ToString("yyyy-MM-dd");
 
-            this.MouseClick += new MouseEventHandler(OnMouseClick);
+
+            
+            MouseClick += new MouseEventHandler(OnMouseClick);
+
+            DrawPlanets(sim.GetBodies());
         }
 
         public Body SelectedBody
@@ -48,9 +58,8 @@ namespace GUI
             return positions;
         }
 
-        public void DrawStep(List<Body> bodies)
+        public void DrawPlanets(List<Body> bodies)
         {
-            Bitmap buffer = new Bitmap(this.Width, this.Height);
             Graphics buffer_g = Graphics.FromImage(buffer);
             buffer_g.Clear(Color.Black);
 
@@ -74,8 +83,11 @@ namespace GUI
                 float endx = (float)pos.Add(velocity).X;
                 float endy = (float)pos.Add(velocity).Y;
                 buffer_g.DrawLine(arrow, startx, starty, endx, endy);
+
                 buffer_g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
                 buffer_g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+
+                //pos.Data();
             }
 
             if (selectedbody != null)
@@ -88,14 +100,9 @@ namespace GUI
                 buffer_g.DrawEllipse(select, (float)selectedbodycoord.X - (highlightsize / 2), (float)selectedbodycoord.Y - (highlightsize / 2), highlightsize, highlightsize);
             }
 
-
             g.DrawImage(buffer, 0, 0);
+            //Debug.WriteLine("Drawn");
         }
-        private void ReplaceSimulation(SystemSimulation simulation)
-        {
-            sim = simulation;
-        }
-
         private async void RunBtn_Click(object sender, EventArgs e)
         {
 
@@ -109,13 +116,11 @@ namespace GUI
                 {
                     idiotbox.Text = "All Clear";
                     running = true;
-                    this.DrawStep(sim.PlanetarySystem.GetBodies());
+                    DrawPlanets(sim.GetBodies());
 
                     await Running();
                 }
             }
-
-
         }
 
         private async Task Running()
@@ -129,14 +134,12 @@ namespace GUI
 
                 if (timesincelastupdate >= (1000 / 60))
                 {
-                    this.DrawStep(sim.PlanetarySystem.GetBodies());
+                    DrawPlanets(sim.GetBodies());
                     lastupdated = DateTime.Now;
                 }
                 await Task.Run(() =>
                 {
                     sim.Step(timestep);
-
-
                 });
                 DateTime datetime = sim.Date;
                 DateAndTimeLabel.Text = datetime.ToString("yyyy-MM-dd");
@@ -203,29 +206,20 @@ namespace GUI
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             running = false;
-            DrawStep(sim.PlanetarySystem.GetBodies());
+            DrawPlanets(sim.GetBodies());
         }
 
         private void logarithmicToolStripMenuItem_Click(object sender, EventArgs e)
         {
             uselog = true;
+            DrawPlanets(sim.GetBodies());
+
         }
 
         private void linearToolStripMenuItem_Click(object sender, EventArgs e)
         {
             uselog = false;
-        }
-
-
-
-        private void Bodies_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            List<Body> bodies = sim.PlanetarySystem.GetBodies();
-            Body selectedbody = null;
-
-
-            BodyInfo file = new BodyInfo(selectedbody, this);
-            file.Show();
+            DrawPlanets(sim.GetBodies());
 
         }
 
@@ -245,13 +239,13 @@ namespace GUI
 
                     if (mouseposition.VectorTo(coord).Modulus() <= size)
                     {
-                        selectedbody = sim.PlanetarySystem.GetBodies()[selectedbodyindex];
+                        selectedbody = sim.GetBodies()[selectedbodyindex];
 
-                        DrawStep(sim.PlanetarySystem.GetBodies());
+                        DrawPlanets(sim.GetBodies());
 
                         if (selectedbodyinfo != null)
                         {
-                           if (selectedbodyinfo.Visible == true)
+                            if (selectedbodyinfo.Visible == true)
                             {
                                 selectedbodyinfo.Close();
                             }
@@ -267,7 +261,7 @@ namespace GUI
 
         public void UpdateBody(Body oldbody, Body newbody)
         {
-            List<Body> bodies = sim.PlanetarySystem.GetBodies();
+            List<Body> bodies = sim.GetBodies();
             int index = 0;
             int i = 0;
             foreach (Body b in bodies)
@@ -279,6 +273,8 @@ namespace GUI
                 i++;
             }
             sim.PlanetarySystem.ReplaceBody(newbody, index);
+            SelectedBody = null;
+            DrawPlanets(sim.GetBodies());
         }
 
 

@@ -21,7 +21,7 @@ namespace GUI
             this.form = form;
             nametextbox.Text = b.Name;
             masstextbox.Text = b.Mass.ToString();
-            radiustextbox.Text = b.Radius.ToString();
+            positiontextbox.Text = b.Position.Modulus().ToString();
             velocitytextbox.Text = b.Velocity.Modulus().ToString();
             primarytextbox.Text = b.Colours.Primary.Name;
             secondarytextbox.Text = b.Colours.Secondary.Name;
@@ -31,7 +31,6 @@ namespace GUI
         {
             Body newbody = CreateBody();
             form.UpdateBody(body, newbody);
-            form.SelectedBody = null;
             this.Close();
         }
 
@@ -39,7 +38,11 @@ namespace GUI
         {
             Vector newvel = body.Velocity.Unit();
             newvel = newvel.Scale(Convert.ToDouble(velocitytextbox.Text));
-            Body newbody = new Body(nametextbox.Text, body.ID, Convert.ToDouble(masstextbox.Text), Convert.ToDouble(radiustextbox.Text), body.Position, newvel);
+
+            Vector newpos = body.Position.Unit();
+            newpos = newpos.Scale(Convert.ToDouble(positiontextbox.Text));
+
+            Body newbody = new Body(nametextbox.Text, body.ID, Convert.ToDouble(masstextbox.Text), body.Radius, newpos, newvel);
             newbody.Colours = new Appearance(Color.FromName(primarytextbox.Text), Color.FromName(secondarytextbox.Text));
             newbody.IsStar = body.IsStar;
 
