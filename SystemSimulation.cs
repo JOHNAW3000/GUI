@@ -40,7 +40,7 @@ namespace GUI
                 return jsontext;
             }
 
-            public void Run(int timestep, Graphics g, SimulationDisplay form)
+            /*public void Run(int timestep, Graphics g, SimulationDisplay form)
             {
 
                 form.DrawStep(planetarysystem.GetBodies());
@@ -54,12 +54,14 @@ namespace GUI
 
                 // make this consistent
                 //Thread.Sleep(10);
-            }
-
-
+            }*/
 
             public void Step(int timestep)
             {
+                
+                date = date.AddSeconds(timestep);
+
+
                 List<Body> bodies = planetarysystem.GetBodies();
 
                 for (int i = 0; i < bodies.Count; i++)

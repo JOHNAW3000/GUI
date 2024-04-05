@@ -42,7 +42,6 @@
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
             idiotbox = new Label();
-            Bodies = new ListBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -136,23 +135,12 @@
             idiotbox.TabIndex = 3;
             idiotbox.Text = "You haven't broken anything, yet...";
             // 
-            // Bodies
-            // 
-            Bodies.FormattingEnabled = true;
-            Bodies.ItemHeight = 15;
-            Bodies.Location = new Point(8, 82);
-            Bodies.Name = "Bodies";
-            Bodies.Size = new Size(190, 49);
-            Bodies.TabIndex = 4;
-            Bodies.SelectedIndexChanged += Bodies_SelectedIndexChanged;
-            // 
             // SimulationDisplay
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
             ClientSize = new Size(984, 749);
-            Controls.Add(Bodies);
             Controls.Add(idiotbox);
             Controls.Add(DateAndTimeLabel);
             Controls.Add(menuStrip1);
@@ -181,6 +169,5 @@
         private ToolStripMenuItem scaleTypeToolStripMenuItem;
         private ToolStripMenuItem logarithmicToolStripMenuItem;
         private ToolStripMenuItem linearToolStripMenuItem;
-        private ListBox Bodies;
     }
 }

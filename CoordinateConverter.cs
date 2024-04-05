@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace GUI
+﻿namespace GUI
 {
     internal static partial class Program
     {
@@ -24,23 +22,40 @@ namespace GUI
             // Methods
 
             // Outputs coordinate list
-            public List<Vector> ConvertCoordsLog(AdjacencyMatrix planets)
+
+            public List<Vector> ConvertCoords(List<Vector> positions, bool uselog)
+            {
+                List<Vector> coordinates;
+
+                if (uselog)
+                {
+                    coordinates = ConvertCoordsLog(positions);
+                }
+                else
+                {
+                    coordinates = ConvertCoordsScalar(positions, 0.000001);
+                }
+
+                return coordinates;
+            }
+
+
+
+
+            private List<Vector> ConvertCoordsLog(List<Vector> positions)
             {
                 double logbase = 1.075;
-
 
                 List<Vector> coords = new List<Vector>();
 
                 Vector centre = new Vector(this.width / 2, this.height / 2);
 
-                List<Body> bodies = planets.GetBodies();
-               
-                foreach (Body body in bodies)
-                {
-                    Vector bpos = body.Position;
 
-                    Vector direction = bpos.Unit();
-                    double magnitude = bpos.Modulus();
+                foreach (Vector pos in positions)
+                {
+
+                    Vector direction = pos.Unit();
+                    double magnitude = pos.Modulus();
 
 
                     Vector coordinate = centre;
@@ -54,26 +69,23 @@ namespace GUI
 
                     coords.Add(coordinate);
                 }
-                
+
                 return coords;
             }
 
 
-            public List<Vector> ConvertCoordsScalar(AdjacencyMatrix planets, double scalar)
+            private List<Vector> ConvertCoordsScalar(List<Vector> positions, double scalar)
             {
 
                 List<Vector> coords = new List<Vector>();
 
                 Vector centre = new Vector(this.width / 2, this.height / 2);
 
-                List<Body> bodies = planets.GetBodies();
-
-                foreach (Body body in bodies)
+                foreach (Vector pos in positions)
                 {
-                    Vector bpos = body.Position;
 
-                    Vector direction = bpos.Unit();
-                    double magnitude = bpos.Modulus();
+                    Vector direction = pos.Unit();
+                    double magnitude = pos.Modulus();
 
 
                     Vector coordinate = centre;

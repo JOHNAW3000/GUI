@@ -29,8 +29,9 @@ namespace GUI
 
         private void updatebtn_Click(object sender, EventArgs e)
         {
-            Body newbody = this.CreateBody();
+            Body newbody = CreateBody();
             form.UpdateBody(body, newbody);
+            form.SelectedBody = null;
             this.Close();
         }
 
@@ -40,6 +41,8 @@ namespace GUI
             newvel = newvel.Scale(Convert.ToDouble(velocitytextbox.Text));
             Body newbody = new Body(nametextbox.Text, body.ID, Convert.ToDouble(masstextbox.Text), Convert.ToDouble(radiustextbox.Text), body.Position, newvel);
             newbody.Colours = new Appearance(Color.FromName(primarytextbox.Text), Color.FromName(secondarytextbox.Text));
+            newbody.IsStar = body.IsStar;
+
             return newbody;
         }
     }
