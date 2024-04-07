@@ -42,12 +42,13 @@
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
             idiotbox = new Label();
+            addBodyToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem, scaleTypeToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem, scaleTypeToolStripMenuItem, addBodyToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(984, 24);
@@ -135,6 +136,13 @@
             idiotbox.TabIndex = 3;
             idiotbox.Text = "You haven't broken anything, yet...";
             // 
+            // addBodyToolStripMenuItem
+            // 
+            addBodyToolStripMenuItem.Name = "addBodyToolStripMenuItem";
+            addBodyToolStripMenuItem.Size = new Size(71, 20);
+            addBodyToolStripMenuItem.Text = "Add Body";
+            addBodyToolStripMenuItem.Click += addBodyToolStripMenuItem_Click;
+            // 
             // SimulationDisplay
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -169,5 +177,6 @@
         private ToolStripMenuItem scaleTypeToolStripMenuItem;
         private ToolStripMenuItem logarithmicToolStripMenuItem;
         private ToolStripMenuItem linearToolStripMenuItem;
+        private ToolStripMenuItem addBodyToolStripMenuItem;
     }
 }

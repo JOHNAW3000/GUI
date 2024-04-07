@@ -41,6 +41,7 @@
             primarytextbox = new TextBox();
             secondarytextbox = new TextBox();
             updatebtn = new Button();
+            removebtn = new Button();
             SuspendLayout();
             // 
             // nametextbox
@@ -64,9 +65,9 @@
             masslabel.AutoSize = true;
             masslabel.Location = new Point(9, 41);
             masslabel.Name = "masslabel";
-            masslabel.Size = new Size(37, 15);
+            masslabel.Size = new Size(58, 15);
             masslabel.TabIndex = 2;
-            masslabel.Text = "Mass:";
+            masslabel.Text = "Mass: /kg";
             // 
             // positionlabel
             // 
@@ -149,11 +150,22 @@
             updatebtn.UseVisualStyleBackColor = true;
             updatebtn.Click += updatebtn_Click;
             // 
+            // removebtn
+            // 
+            removebtn.Location = new Point(194, 178);
+            removebtn.Name = "removebtn";
+            removebtn.Size = new Size(75, 23);
+            removebtn.TabIndex = 13;
+            removebtn.Text = "Remove";
+            removebtn.UseVisualStyleBackColor = true;
+            removebtn.Click += removebtn_Click;
+            // 
             // BodyInfo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(308, 213);
+            Controls.Add(removebtn);
             Controls.Add(updatebtn);
             Controls.Add(secondarytextbox);
             Controls.Add(primarytextbox);
@@ -188,5 +200,6 @@
         private TextBox primarytextbox;
         private TextBox secondarytextbox;
         private Button updatebtn;
+        private Button removebtn;
     }
 }

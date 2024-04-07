@@ -48,5 +48,11 @@ namespace GUI
 
             return newbody;
         }
+
+        private void removebtn_Click(object sender, EventArgs e)
+        {
+            form.RemoveBody(body);
+            this.Close();
+        }
     }
 }

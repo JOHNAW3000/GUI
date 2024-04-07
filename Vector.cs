@@ -98,7 +98,8 @@ namespace GUI
             double scalarproduct = ScalarProduct(this, v);
             double modproduct = this.Modulus() * v.Modulus();
             double result = scalarproduct / modproduct;
-            return Math.Acos(result);
+            result = Math.Acos(result);
+            return result * (180 / Math.PI);
         }
 
         private static double ScalarProduct(Vector a, Vector b)

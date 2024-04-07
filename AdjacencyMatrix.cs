@@ -54,6 +54,28 @@ namespace GUI
                 return edges;
             }
 
+            // Remove body
+
+            public void RemoveBody(Body body)
+            {
+                edges = Remove(edges, body);
+                bodies.Remove(body);
+
+            }
+
+            private List<List<Vector>> Remove(List<List<Vector>> edges, Body body)
+            {
+                int index = bodies.IndexOf(body);
+
+                foreach (List<Vector> column in edges)
+                {
+                    column.RemoveAt(index);
+                }
+                edges.RemoveAt(index);
+
+                return edges;
+            }
+
             // Update Forces
             public void Update()
             {
@@ -67,7 +89,7 @@ namespace GUI
                         }
                         else
                         {
-                           //Console.WriteLine($"bodies.Count: {bodies.Count}, i: {i}, j: {j
+                            //Console.WriteLine($"bodies.Count: {bodies.Count}, i: {i}, j: {j
                             edges[i][j] = CalculateForce(i, j);
                         }
 
@@ -91,14 +113,14 @@ namespace GUI
                         //force.Data();
                         edges[columnindex][index] = force;
                     }
-                    
+
                 }
             }
 
             public Vector Resultant(int index)
             {
                 Vector resultantforce = new Vector(0, 0);
-               
+
                 foreach (List<Vector> column in edges)
                 {
                     resultantforce = resultantforce.Add(column[index]);

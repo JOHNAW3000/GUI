@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+using System.Drawing;
 using static GUI.Program;
 
 
@@ -29,14 +29,14 @@ namespace GUI
 
             g = CreateGraphics();
             buffer = new Bitmap(Width, Height);
-            
+
 
             coordcon = new CoordinateConverter(Width, Height);
             sim = GetLiveSolarSystem();
             DateAndTimeLabel.Text = sim.Date.ToString("yyyy-MM-dd");
 
 
-            
+
             MouseClick += new MouseEventHandler(OnMouseClick);
 
             DrawPlanets(sim.GetBodies());
@@ -277,8 +277,24 @@ namespace GUI
             DrawPlanets(sim.GetBodies());
         }
 
+        public void RemoveBody(Body body)
+        {
+            sim.PlanetarySystem.RemoveBody(body);
+            DrawPlanets(sim.GetBodies());
+            selectedbody = null;
+        }
+
+        private void addBodyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BodyCreationForm bodyCreationForm = new BodyCreationForm(this);
+            bodyCreationForm.Show();
+        }
 
 
-
+        public void AddBody(Body body)
+        {
+            sim.PlanetarySystem.AddBody(body);
+            DrawPlanets(sim.GetBodies());
+        }
     }
 }
