@@ -1,4 +1,4 @@
-using System.Drawing;
+using System.Diagnostics;
 using static GUI.Program;
 
 
@@ -22,10 +22,13 @@ namespace GUI
 
         private BodyInfo selectedbodyinfo;
 
+        private int zoomlevel;
+
         public SimulationDisplay()
         {
             InitializeComponent();
             //DoubleBuffered = true;
+            zoomlevel = 3;
 
             g = CreateGraphics();
             buffer = new Bitmap(Width, Height);
@@ -38,6 +41,7 @@ namespace GUI
 
 
             MouseClick += new MouseEventHandler(OnMouseClick);
+            MouseWheel += new MouseEventHandler(OnMouseWheel);
 
             DrawPlanets(sim.GetBodies());
         }
@@ -48,10 +52,10 @@ namespace GUI
             set { selectedbody = value; }
         }
 
-        private List<Vector> GetPositions(AdjacencyMatrix matrix)
+        private List<Vector> GetPositions(List<Body> bodies)
         {
             List<Vector> positions = new List<Vector>();
-            foreach (Body b in matrix.GetBodies())
+            foreach (Body b in bodies)
             {
                 positions.Add(b.Position);
             }
@@ -64,28 +68,35 @@ namespace GUI
             buffer_g.Clear(Color.Black);
 
             int size = 20;
-            List<Vector> positions = GetPositions(sim.PlanetarySystem);
-            List<Vector> coordinates = coordcon.ConvertCoords(positions, uselog);
+            List<Vector> positions = GetPositions(bodies);
+            List<Vector> coordinates = coordcon.ConvertCoords(positions, uselog, zoomlevel);
 
 
             for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
             {
+                Body body = bodies[bodyindex];
                 Vector pos = coordinates[bodyindex];
-                Appearance colours = bodies[bodyindex].Colours;
+                Appearance colours = body.Colours;
                 Pen p = new Pen(colours.Primary, 5);
                 Brush b = new SolidBrush(colours.Secondary);
-                Pen arrow = new Pen(colours.Secondary, 3);
+                Pen arrowPen = new Pen(colours.Secondary, 3);
 
 
-                Vector velocity = bodies[bodyindex].Velocity;
+                Vector velocity = body.Velocity;
                 float startx = (float)pos.X;
                 float starty = (float)pos.Y;
                 float endx = (float)pos.Add(velocity).X;
                 float endy = (float)pos.Add(velocity).Y;
-                buffer_g.DrawLine(arrow, startx, starty, endx, endy);
 
-                buffer_g.FillEllipse(b, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
-                buffer_g.DrawEllipse(p, (float)pos.X - (size / 2), (float)pos.Y - (size / 2), size, size);
+                try
+                {
+                    buffer_g.DrawLine(arrowPen, startx, starty, endx, endy);
+
+                    buffer_g.FillEllipse(b, startx - (size / 2), starty - (size / 2), size, size);
+                    buffer_g.DrawEllipse(p, startx - (size / 2), starty - (size / 2), size, size);
+                }
+                catch { }
+
 
                 //pos.Data();
             }
@@ -94,10 +105,42 @@ namespace GUI
             {
                 int highlightsize = size + 10;
                 Vector selectedbodycoord = coordcon.ConvertCoords(new List<Vector>()
-                { selectedbody.Position }, uselog)[0];
+                { selectedbody.Position }, uselog, zoomlevel)[0];
 
-                Pen select = new Pen(Color.White, 3);
-                buffer_g.DrawEllipse(select, (float)selectedbodycoord.X - (highlightsize / 2), (float)selectedbodycoord.Y - (highlightsize / 2), highlightsize, highlightsize);
+                Pen selectedbodyPen = new Pen(Color.White, 3);
+
+                //selectedbody.Orbit.Data();
+                OrbitPath ellipse = coordcon.ConvertOrbit(selectedbody.Orbit, uselog, zoomlevel);
+
+                double minoraxislength = Math.Sqrt(ellipse.Aphelion.Modulus() * ellipse.Perihelion.Modulus());
+
+                Vector centralbody = new Vector(Width / 2, Height / 2);
+
+                //selectedbodycoord.Data();
+                //ellipse.Data();
+
+                //float ellipsex = (float)(centralbody.X - minoraxislength);
+                //float ellipsey = (float)(centralbody.Y - ellipse.Perihelion.Modulus());
+
+                float ellipsex = (float)centralbody.X;
+                float ellipsey = (float)centralbody.Y ;
+
+                Debug.WriteLine($"aphelion mod: {ellipse.Aphelion.Modulus()}");
+                //Debug.WriteLine($"x:{ellipsex}, y:{ellipsey}");
+
+
+                try
+                {
+                    buffer_g.DrawEllipse(selectedbodyPen, (float)selectedbodycoord.X - (highlightsize / 2), (float)selectedbodycoord.Y - (highlightsize / 2), highlightsize, highlightsize);
+
+                    //buffer_g.RotateTransform((float)ellipse.Aphelion.AngleBetween(new Vector(0, 1)));
+                    buffer_g.DrawLine(selectedbodyPen, ellipsex, ellipsey, (float)ellipse.Aphelion.X, (float)ellipse.Aphelion.Y);
+                    //buffer_g.DrawEllipse(selectedbodyPen, ellipsex, ellipsey, (float)ellipse.Perihelion.VectorTo(ellipse.Aphelion).Modulus(), (float)minoraxislength / 2);
+                    //buffer_g.DrawEllipse(selectedbodyPen, ellipsex, ellipsey, 20, 20);
+
+                    //buffer_g.ResetTransform();
+                }
+                catch { }
             }
 
             g.DrawImage(buffer, 0, 0);
@@ -125,7 +168,7 @@ namespace GUI
 
         private async Task Running()
         {
-            int timestep = 3600 * 24;
+            //int timestep = 3600 * 24;
             DateTime lastupdated = DateTime.Now;
 
             while (running)
@@ -139,7 +182,7 @@ namespace GUI
                 }
                 await Task.Run(() =>
                 {
-                    sim.Step(timestep);
+                    sim.Step();
                 });
                 DateTime datetime = sim.Date;
                 DateAndTimeLabel.Text = datetime.ToString("yyyy-MM-dd");
@@ -228,7 +271,7 @@ namespace GUI
             selectedbody = null;
             if (sim != null)
             {
-                List<Vector> coordinates = coordcon.ConvertCoords(GetPositions(sim.PlanetarySystem), uselog);
+                List<Vector> coordinates = coordcon.ConvertCoords(GetPositions(sim.GetBodies()), uselog, zoomlevel);
 
                 Vector mouseposition = new Vector(e.X, e.Y);
 
@@ -259,10 +302,26 @@ namespace GUI
             }
         }
 
+        private void OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            zoomlevel += e.Delta / 120;
+            if (zoomlevel < 1)
+            {
+                zoomlevel = 1;
+            }
+            else if (zoomlevel > 10)
+            {
+                zoomlevel = 10;
+            }
+            DrawPlanets(sim.GetBodies());
+        }
+
         public void UpdateBody(Body oldbody, Body newbody)
         {
+            //oldbody.Data();
+            //newbody.Data();
             List<Body> bodies = sim.GetBodies();
-            int index = 0;
+            int index = -1;
             int i = 0;
             foreach (Body b in bodies)
             {
@@ -272,7 +331,9 @@ namespace GUI
                 }
                 i++;
             }
+            //Debug.WriteLine(index);
             sim.PlanetarySystem.ReplaceBody(newbody, index);
+            //Debug.WriteLine(sim.GetBodies().Count);
             SelectedBody = null;
             DrawPlanets(sim.GetBodies());
         }

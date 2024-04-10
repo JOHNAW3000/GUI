@@ -56,8 +56,8 @@
                 {"Uranus",  "799" },
                 {"Neptune", "899" },
                 {"Pluto",   "999" },
-                {"Moon",    "301"}
-
+                {"Moon",    "301" },
+                {"Commet",  "90000001" }
              };
 
                 string ID = HorizonsID[name];
@@ -87,11 +87,26 @@
 
                 string masspattern = @"Mass,?\s*x?\s*10.(\d+).+?=\s*~?(\d+\.?\d*)";
                 Match massmatch = Regex.Match(response, masspattern);
-                double mass = float.Parse(massmatch.Groups[2].Value) * Math.Pow(10, Convert.ToInt32(massmatch.Groups[1].Value));
+                // temp
 
                 string radiuspattern = @"M?m?ean R?r?adius.+?=\s*(\d+\.?\d*?)";
                 Match radiusmatch = Regex.Match(response, radiuspattern);
-                double radius = Convert.ToDouble(radiusmatch.Groups[1].Value);
+
+                double mass = 0;
+                double radius = 0;
+
+                if (queryname == "Commet")
+                {
+                    mass = 1E6;
+                }
+                else
+                {
+                    mass = float.Parse(massmatch.Groups[2].Value) * Math.Pow(10, Convert.ToInt32(massmatch.Groups[1].Value));
+                    radius = Convert.ToDouble(radiusmatch.Groups[1].Value);
+
+                }
+
+
 
                 string positionpattern = @"SOE\s*.*\n\s*?X =(-? ?\d+\.\d+E\+?-?\d+).*?Y =(-? ?\d+\.\d+E\+?-?\d+)";
                 Match positionmatch = Regex.Match(response, positionpattern);

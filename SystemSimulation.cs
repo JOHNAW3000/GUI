@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics;
 namespace GUI
 
 {
@@ -9,7 +10,8 @@ namespace GUI
             // Properties
             private AdjacencyMatrix planetarysystem;
             private DateTime date;
-            private SimulationDisplay display;
+
+            private int timestep = 3600 * 24;
 
             // Constructor
             public SystemSimulation(AdjacencyMatrix forces, DateTime date)
@@ -61,7 +63,7 @@ namespace GUI
                 //Thread.Sleep(10);
             }*/
 
-            public void Step(int timestep)
+            public void Step()
             {
                 
                 date = date.AddSeconds(timestep);
@@ -77,6 +79,7 @@ namespace GUI
                     Body body = bodies[i];
                     if (!body.IsStar)
                     {
+
                         double mass = body.Mass;
 
                         Vector resultant = planetarysystem.Resultant(i);
@@ -91,6 +94,9 @@ namespace GUI
 
                         Vector velocity = body.Velocity;
                         velocity = velocity.Scale(1000);
+
+                        Vector centralbodypos = new Vector(0,0);
+                        body.Orbit.Update(centralbodypos, position, timestep);
 
 
                         // Calculate new position

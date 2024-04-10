@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace GUI
 {
@@ -16,6 +15,7 @@ namespace GUI
         private string stats;
         private Appearance colours;
         private bool isstar = false;
+        private OrbitPath orbit;
 
 
         // Constructor
@@ -28,6 +28,7 @@ namespace GUI
             this.radius = radius;
             this.position = position;
             this.velocity = velocity;
+            this.Orbit = new OrbitPath(position);
         }
 
         // Methods
@@ -80,7 +81,11 @@ namespace GUI
             set { isstar = value; }
         }
 
-
+        public OrbitPath Orbit
+        {
+            get { return orbit; }
+            set { orbit = value; }
+        }
 
         public void Data()
         {

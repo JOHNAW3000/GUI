@@ -1,4 +1,6 @@
-﻿namespace GUI
+﻿using System.Diagnostics;
+
+namespace GUI
 {
     internal static partial class Program
     {
@@ -23,17 +25,17 @@
 
             // Outputs coordinate list
 
-            public List<Vector> ConvertCoords(List<Vector> positions, bool uselog)
+            public List<Vector> ConvertCoords(List<Vector> positions, bool uselog, float zoomlevel)
             {
                 List<Vector> coordinates;
 
                 if (uselog)
                 {
-                    coordinates = ConvertCoordsLog(positions);
+                    coordinates = ConvertCoordsLog(positions, zoomlevel);
                 }
                 else
                 {
-                    coordinates = ConvertCoordsScalar(positions, 0.000001);
+                    coordinates = ConvertCoordsScalar(positions, zoomlevel);
                 }
 
                 return coordinates;
@@ -42,9 +44,8 @@
 
 
 
-            private List<Vector> ConvertCoordsLog(List<Vector> positions)
+            private List<Vector> ConvertCoordsLog(List<Vector> positions, float zoomlevel)
             {
-                double logbase = 1.075;
 
                 List<Vector> coords = new List<Vector>();
 
@@ -63,7 +64,7 @@
                     if (magnitude != 0)
                     {
                         //magnitude = Math.Log(magnitude, logbase);
-                        magnitude = Math.Pow(magnitude / 5E9, 1 / 3f) * height * 0.9 * 0.5;
+                        magnitude = Math.Pow(magnitude / 6E9, 1f / zoomlevel) * height * 0.9 * 0.5;
 
                         coordinate = direction.Scale(magnitude);
                         coordinate = coordinate.Add(centre);
@@ -76,8 +77,9 @@
             }
 
 
-            private List<Vector> ConvertCoordsScalar(List<Vector> positions, double scalar)
+            private List<Vector> ConvertCoordsScalar(List<Vector> positions, float zoomlevel)
             {
+                double scalar = Math.Pow(10, -10 + zoomlevel);
 
                 List<Vector> coords = new List<Vector>();
 
@@ -103,6 +105,40 @@
                 }
 
                 return coords;
+            }
+
+
+            public OrbitPath ConvertOrbit(OrbitPath orbit, bool uselog, int zoomlevel)
+            {
+
+                Vector centre = new Vector(this.width / 2, this.height / 2);
+
+                List<Vector> ellipsevertices = ConvertCoords(new List<Vector>()
+                {
+                    orbit.Aphelion, orbit.Perihelion
+                }, uselog, zoomlevel);
+
+
+
+
+                Vector aphelion = ellipsevertices[0];
+                Vector perihelion = ellipsevertices[1];
+
+                //this is a bodge
+
+                aphelion = aphelion.Add(centre.Scale(-1));
+                perihelion = perihelion.Add(centre.Scale(-1));
+
+                OrbitPath ellipse = new OrbitPath(aphelion);
+                ellipse.Aphelion = aphelion;
+                ellipse.Perihelion = perihelion;
+
+
+                //Debug.WriteLine("Orbit");
+                //orbit.Data();
+                //Debug.WriteLine("Ellipse");
+                //ellipse.Data();
+                return ellipse;
             }
 
 

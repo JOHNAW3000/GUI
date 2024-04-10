@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace GUI
+﻿namespace GUI
 {
     public partial class BodyInfo : Form
     {
@@ -30,6 +20,14 @@ namespace GUI
         private void updatebtn_Click(object sender, EventArgs e)
         {
             Body newbody = CreateBody();
+            if (body.Position.Modulus() == 0)
+            {
+                newbody.Position = new Vector(0, 0);
+            }
+            if (body.Velocity.Modulus() == 0)
+            {
+                newbody.Velocity = new Vector(0, 0);
+            }
             form.UpdateBody(body, newbody);
             this.Close();
         }

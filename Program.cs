@@ -20,8 +20,8 @@ namespace GUI
             AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
 
             // Creates a list of planets to loop through
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-            //string[] planets = { "Earth", "Moon" };
+            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Commet"};
+            //string[] planets = {"Sun", "Earth", "Moon" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
 
@@ -70,6 +70,10 @@ namespace GUI
                         break;
                     case "Moon":
                         body.Colours = new Appearance(Color.Gray, Color.DarkGray);
+                        break;
+
+                    default:
+                        body.Colours = new Appearance(Color.Pink, Color.Magenta);
                         break;
                 }
 
