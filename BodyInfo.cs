@@ -1,4 +1,6 @@
-﻿namespace GUI
+﻿using System.Drawing;
+
+namespace GUI
 {
     public partial class BodyInfo : Form
     {
@@ -15,6 +17,13 @@
             velocitytextbox.Text = b.Velocity.Modulus().ToString();
             primarytextbox.Text = b.Colours.Primary.Name;
             secondarytextbox.Text = b.Colours.Secondary.Name;
+
+            this.Paint += new PaintEventHandler(this.BodyInfo_Paint);
+        }
+
+        private void BodyInfo_Paint(object sender, PaintEventArgs e)
+        {
+            DrawPlanetIcon();
         }
 
         private void updatebtn_Click(object sender, EventArgs e)
@@ -51,6 +60,29 @@
         {
             form.RemoveBody(body);
             this.Close();
+        }
+
+        private void DrawPlanetIcon()
+        {
+            Graphics g = CreateGraphics();
+
+            Pen p = new Pen(Color.FromName(primarytextbox.Text), 5);
+            Brush b = new SolidBrush(Color.FromName(secondarytextbox.Text));
+
+            int size = 20;
+
+            g.FillEllipse(b, 45, 180, size, size);
+            g.DrawEllipse(p, 45, 180, size, size);
+        }
+
+        private void primarytextbox_TextChanged(object sender, EventArgs e)
+        {
+            DrawPlanetIcon();
+        }
+
+        private void secondarytextbox_TextChanged(object sender, EventArgs e)
+        {
+            DrawPlanetIcon();
         }
     }
 }

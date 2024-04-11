@@ -42,7 +42,13 @@ namespace GUI
 
             MouseClick += new MouseEventHandler(OnMouseClick);
             MouseWheel += new MouseEventHandler(OnMouseWheel);
+            //KeyDown += new KeyEventHandler();
 
+            this.Paint += new PaintEventHandler(this.SimulationDisplay_Paint);
+        }
+
+        private void SimulationDisplay_Paint(object sender, PaintEventArgs e)
+        {
             DrawPlanets(sim.GetBodies());
         }
 
@@ -110,11 +116,11 @@ namespace GUI
                 Pen selectedbodyPen = new Pen(Color.White, 3);
 
                 //selectedbody.Orbit.Data();
-                OrbitPath ellipse = coordcon.ConvertOrbit(selectedbody.Orbit, uselog, zoomlevel);
+                //OrbitPath ellipse = coordcon.ConvertOrbit(selectedbody.Orbit, uselog, zoomlevel);
 
-                double minoraxislength = Math.Sqrt(ellipse.Aphelion.Modulus() * ellipse.Perihelion.Modulus());
+                //double minoraxislength = Math.Sqrt(ellipse.Aphelion.Modulus() * ellipse.Perihelion.Modulus());
 
-                Vector centralbody = new Vector(Width / 2, Height / 2);
+                //Vector centralbody = new Vector(Width / 2, Height / 2);
 
                 //selectedbodycoord.Data();
                 //ellipse.Data();
@@ -122,10 +128,10 @@ namespace GUI
                 //float ellipsex = (float)(centralbody.X - minoraxislength);
                 //float ellipsey = (float)(centralbody.Y - ellipse.Perihelion.Modulus());
 
-                float ellipsex = (float)centralbody.X;
-                float ellipsey = (float)centralbody.Y ;
+                //float ellipsex = (float)centralbody.X;
+                //float ellipsey = (float)centralbody.Y ;
 
-                Debug.WriteLine($"aphelion mod: {ellipse.Aphelion.Modulus()}");
+                //Debug.WriteLine($"aphelion mod: {ellipse.Aphelion.Modulus()}");
                 //Debug.WriteLine($"x:{ellipsex}, y:{ellipsey}");
 
 
@@ -134,7 +140,7 @@ namespace GUI
                     buffer_g.DrawEllipse(selectedbodyPen, (float)selectedbodycoord.X - (highlightsize / 2), (float)selectedbodycoord.Y - (highlightsize / 2), highlightsize, highlightsize);
 
                     //buffer_g.RotateTransform((float)ellipse.Aphelion.AngleBetween(new Vector(0, 1)));
-                    buffer_g.DrawLine(selectedbodyPen, ellipsex, ellipsey, (float)ellipse.Aphelion.X, (float)ellipse.Aphelion.Y);
+                    //buffer_g.DrawLine(selectedbodyPen, ellipsex, ellipsey, (float)ellipse.Aphelion.X, (float)ellipse.Aphelion.Y);
                     //buffer_g.DrawEllipse(selectedbodyPen, ellipsex, ellipsey, (float)ellipse.Perihelion.VectorTo(ellipse.Aphelion).Modulus(), (float)minoraxislength / 2);
                     //buffer_g.DrawEllipse(selectedbodyPen, ellipsex, ellipsey, 20, 20);
 

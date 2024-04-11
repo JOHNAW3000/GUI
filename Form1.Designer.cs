@@ -38,17 +38,18 @@
             scaleTypeToolStripMenuItem = new ToolStripMenuItem();
             logarithmicToolStripMenuItem = new ToolStripMenuItem();
             linearToolStripMenuItem = new ToolStripMenuItem();
+            addBodyToolStripMenuItem = new ToolStripMenuItem();
             DateAndTimeLabel = new Label();
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
             idiotbox = new Label();
-            addBodyToolStripMenuItem = new ToolStripMenuItem();
+            showLegendToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem, scaleTypeToolStripMenuItem, addBodyToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileMenu, RunBtn, stopToolStripMenuItem, scaleTypeToolStripMenuItem, addBodyToolStripMenuItem, showLegendToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(984, 24);
@@ -118,6 +119,13 @@
             linearToolStripMenuItem.Text = "Linear";
             linearToolStripMenuItem.Click += linearToolStripMenuItem_Click;
             // 
+            // addBodyToolStripMenuItem
+            // 
+            addBodyToolStripMenuItem.Name = "addBodyToolStripMenuItem";
+            addBodyToolStripMenuItem.Size = new Size(71, 20);
+            addBodyToolStripMenuItem.Text = "Add Body";
+            addBodyToolStripMenuItem.Click += addBodyToolStripMenuItem_Click;
+            // 
             // DateAndTimeLabel
             // 
             DateAndTimeLabel.AutoSize = true;
@@ -136,12 +144,11 @@
             idiotbox.TabIndex = 3;
             idiotbox.Text = "You haven't broken anything, yet...";
             // 
-            // addBodyToolStripMenuItem
+            // showLegendToolStripMenuItem
             // 
-            addBodyToolStripMenuItem.Name = "addBodyToolStripMenuItem";
-            addBodyToolStripMenuItem.Size = new Size(71, 20);
-            addBodyToolStripMenuItem.Text = "Add Body";
-            addBodyToolStripMenuItem.Click += addBodyToolStripMenuItem_Click;
+            showLegendToolStripMenuItem.Name = "showLegendToolStripMenuItem";
+            showLegendToolStripMenuItem.Size = new Size(90, 20);
+            showLegendToolStripMenuItem.Text = "Show Legend";
             // 
             // SimulationDisplay
             // 
@@ -178,5 +185,6 @@
         private ToolStripMenuItem logarithmicToolStripMenuItem;
         private ToolStripMenuItem linearToolStripMenuItem;
         private ToolStripMenuItem addBodyToolStripMenuItem;
+        private ToolStripMenuItem showLegendToolStripMenuItem;
     }
 }

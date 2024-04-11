@@ -95,8 +95,8 @@ namespace GUI
                         Vector velocity = body.Velocity;
                         velocity = velocity.Scale(1000);
 
-                        Vector centralbodypos = new Vector(0,0);
-                        body.Orbit.Update(centralbodypos, position, timestep);
+                        //Vector centralbodypos = new Vector(0,0);
+                        //body.Orbit.Update(centralbodypos, position, timestep);
 
 
                         // Calculate new position

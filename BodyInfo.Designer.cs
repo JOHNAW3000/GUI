@@ -42,6 +42,7 @@
             secondarytextbox = new TextBox();
             updatebtn = new Button();
             removebtn = new Button();
+            iconlabel = new Label();
             SuspendLayout();
             // 
             // nametextbox
@@ -132,6 +133,7 @@
             primarytextbox.Name = "primarytextbox";
             primarytextbox.Size = new Size(164, 23);
             primarytextbox.TabIndex = 10;
+            primarytextbox.TextChanged += primarytextbox_TextChanged;
             // 
             // secondarytextbox
             // 
@@ -139,6 +141,7 @@
             secondarytextbox.Name = "secondarytextbox";
             secondarytextbox.Size = new Size(164, 23);
             secondarytextbox.TabIndex = 11;
+            secondarytextbox.TextChanged += secondarytextbox_TextChanged;
             // 
             // updatebtn
             // 
@@ -160,11 +163,21 @@
             removebtn.UseVisualStyleBackColor = true;
             removebtn.Click += removebtn_Click;
             // 
+            // iconlabel
+            // 
+            iconlabel.AutoSize = true;
+            iconlabel.Location = new Point(6, 180);
+            iconlabel.Name = "iconlabel";
+            iconlabel.Size = new Size(33, 15);
+            iconlabel.TabIndex = 14;
+            iconlabel.Text = "Icon:";
+            // 
             // BodyInfo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(308, 213);
+            Controls.Add(iconlabel);
             Controls.Add(removebtn);
             Controls.Add(updatebtn);
             Controls.Add(secondarytextbox);
@@ -201,5 +214,6 @@
         private TextBox secondarytextbox;
         private Button updatebtn;
         private Button removebtn;
+        private Label iconlabel;
     }
 }
