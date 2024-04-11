@@ -64,7 +64,7 @@ namespace GUI
                     if (magnitude != 0)
                     {
                         //magnitude = Math.Log(magnitude, logbase);
-                        magnitude = Math.Pow(magnitude / 6E9, 1f / zoomlevel) * height * 0.9 * 0.5;
+                        magnitude = Math.Pow(magnitude / 6E9, 1f / zoomlevel) * height * 0.9 * 0.5; ///// EXPLAIN //// and fix
 
                         coordinate = direction.Scale(magnitude);
                         coordinate = coordinate.Add(centre);
@@ -119,7 +119,9 @@ namespace GUI
                 }, uselog, zoomlevel);
 
 
-
+                // comment 
+                // |        |        |
+                // -------------------
 
                 Vector aphelion = ellipsevertices[0];
                 Vector perihelion = ellipsevertices[1];

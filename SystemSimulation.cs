@@ -23,6 +23,11 @@ namespace GUI
 
             // Methods
 
+            public int Timestep
+            {
+                get { return timestep; }
+                set { timestep = value; }
+            }
             public AdjacencyMatrix PlanetarySystem
             {
                 get { return planetarysystem; }

@@ -20,7 +20,9 @@ namespace GUI
             AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
 
             // Creates a list of planets to loop through
-            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Commet"};
+            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Commet"};
+            string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"};
+
             //string[] planets = {"Sun", "Earth", "Moon" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
@@ -80,6 +82,7 @@ namespace GUI
 
 
                 // Add to force matrix
+                body.Data();
                 planetarysystem.AddBody(body);
             }
 

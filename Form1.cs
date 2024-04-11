@@ -24,11 +24,14 @@ namespace GUI
 
         private int zoomlevel;
 
+        private int timesteplevel;
+
         public SimulationDisplay()
         {
             InitializeComponent();
             //DoubleBuffered = true;
             zoomlevel = 3;
+            timesteplevel = 4;
 
             g = CreateGraphics();
             buffer = new Bitmap(Width, Height);
@@ -42,7 +45,6 @@ namespace GUI
 
             MouseClick += new MouseEventHandler(OnMouseClick);
             MouseWheel += new MouseEventHandler(OnMouseWheel);
-            //KeyDown += new KeyEventHandler();
 
             this.Paint += new PaintEventHandler(this.SimulationDisplay_Paint);
         }
@@ -310,16 +312,63 @@ namespace GUI
 
         private void OnMouseWheel(object sender, MouseEventArgs e)
         {
-            zoomlevel += e.Delta / 120;
-            if (zoomlevel < 1)
+            if (Control.ModifierKeys == Keys.Control)
             {
-                zoomlevel = 1;
+                timesteplevel += e.Delta / 120;
+                if (timesteplevel < 0)
+                {
+                    timesteplevel = 0;
+                }
+                else if (timesteplevel > 7)
+                {
+                    timesteplevel = 7;
+                }
+
+                switch (timesteplevel)
+                {
+
+                    case 0:
+                        sim.Timestep = 1;
+                        break;
+                    case 1:
+                        sim.Timestep = 60;
+                        break;
+                    case 2:
+                        sim.Timestep = 60 * 5;
+                        break;
+                    case 3:
+                        sim.Timestep = 60 * 30;
+                    break;
+                    case 4:
+                        sim.Timestep = 60 * 60;
+                        break;
+                    case 5:
+                        sim.Timestep = 60 * 60 * 6;
+                        break;
+                    case 6:
+                        sim.Timestep = 60 * 60 * 12;
+                        break;
+                    case 7:
+                        sim.Timestep = 60 * 60 * 24;
+                        break;
+                }
+
+                Debug.WriteLine($"Timestep: {sim.Timestep} at level {timesteplevel}");
             }
-            else if (zoomlevel > 10)
+            else
             {
-                zoomlevel = 10;
+                zoomlevel += e.Delta / 120;
+                if (zoomlevel < 1)
+                {
+                    zoomlevel = 1;
+                }
+                else if (zoomlevel > 10)
+                {
+                    zoomlevel = 10;
+                }
+                DrawPlanets(sim.GetBodies());
             }
-            DrawPlanets(sim.GetBodies());
+
         }
 
         public void UpdateBody(Body oldbody, Body newbody)
