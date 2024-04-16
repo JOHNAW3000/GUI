@@ -8,7 +8,6 @@ namespace GUI
         private Vector aphelion;
         private Vector perihelion;
 
-
         private int period;
 
         private Vector focusposition;

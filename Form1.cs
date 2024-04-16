@@ -76,6 +76,8 @@ namespace GUI
             buffer_g.Clear(Color.Black);
 
             int size = 20;
+
+            
             List<Vector> positions = GetPositions(bodies);
             List<Vector> coordinates = coordcon.ConvertCoords(positions, uselog, zoomlevel);
 
@@ -83,6 +85,16 @@ namespace GUI
             for (int bodyindex = 0; bodyindex < bodies.Count; bodyindex++)
             {
                 Body body = bodies[bodyindex];
+
+                /*if (body.Name == "Moon")
+                {
+                    size = 5;
+                }
+                else
+                {
+                    size = 20;
+                }*/
+
                 Vector pos = coordinates[bodyindex];
                 Appearance colours = body.Colours;
                 Pen p = new Pen(colours.Primary, 5);
