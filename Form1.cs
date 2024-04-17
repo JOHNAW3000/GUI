@@ -22,6 +22,8 @@ namespace GUI
 
         private BodyInfo selectedbodyinfo;
 
+        private Legend legend;
+
         private int zoomlevel;
 
         private int timesteplevel;
@@ -46,7 +48,7 @@ namespace GUI
             MouseClick += new MouseEventHandler(OnMouseClick);
             MouseWheel += new MouseEventHandler(OnMouseWheel);
 
-            this.Paint += new PaintEventHandler(this.SimulationDisplay_Paint);
+            Paint += new PaintEventHandler(SimulationDisplay_Paint);
         }
 
         private void SimulationDisplay_Paint(object sender, PaintEventArgs e)
@@ -77,7 +79,7 @@ namespace GUI
 
             int size = 20;
 
-            
+
             List<Vector> positions = GetPositions(bodies);
             List<Vector> coordinates = coordcon.ConvertCoords(positions, uselog, zoomlevel);
 
@@ -313,13 +315,18 @@ namespace GUI
                                 selectedbodyinfo.Close();
                             }
                         }
-                        selectedbodyinfo = new BodyInfo(selectedbody, this);
-                        selectedbodyinfo.Show();
+                        ShowBodyInfo(selectedbody);
                         break;
                     }
                     selectedbodyindex++;
                 }
             }
+        }
+
+        public void ShowBodyInfo(Body body)
+        {
+            selectedbodyinfo = new BodyInfo(body, this);
+            selectedbodyinfo.Show();
         }
 
         private void OnMouseWheel(object sender, MouseEventArgs e)
@@ -350,7 +357,7 @@ namespace GUI
                         break;
                     case 3:
                         sim.Timestep = 60 * 30;
-                    break;
+                        break;
                     case 4:
                         sim.Timestep = 60 * 60;
                         break;
@@ -402,6 +409,12 @@ namespace GUI
             sim.PlanetarySystem.ReplaceBody(newbody, index);
             //Debug.WriteLine(sim.GetBodies().Count);
             SelectedBody = null;
+
+            if (legend != null)
+            {
+                legend.Update(sim.GetBodies());
+            }
+
             DrawPlanets(sim.GetBodies());
         }
 
@@ -423,6 +436,19 @@ namespace GUI
         {
             sim.PlanetarySystem.AddBody(body);
             DrawPlanets(sim.GetBodies());
+        }
+
+        private void showLegendToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (legend == null)
+            {
+                legend = new Legend(sim.GetBodies(), this);
+            }
+            if (!legend.Visible)
+            {
+                legend.Show();
+            }
+
         }
     }
 }

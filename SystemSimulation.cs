@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
 namespace GUI
 
 {
@@ -70,7 +69,7 @@ namespace GUI
 
             public void Step()
             {
-                
+
                 date = date.AddSeconds(timestep);
 
 
@@ -82,7 +81,7 @@ namespace GUI
                     // Now using Verlet method
 
                     Body body = bodies[i];
-                    if (!body.IsStar)
+                    if (!body.IsStar && body.Mass != 0)
                     {
 
                         double mass = body.Mass;

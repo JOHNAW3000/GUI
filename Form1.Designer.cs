@@ -39,11 +39,11 @@
             logarithmicToolStripMenuItem = new ToolStripMenuItem();
             linearToolStripMenuItem = new ToolStripMenuItem();
             addBodyToolStripMenuItem = new ToolStripMenuItem();
+            showLegendToolStripMenuItem = new ToolStripMenuItem();
             DateAndTimeLabel = new Label();
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
             idiotbox = new Label();
-            showLegendToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -126,6 +126,13 @@
             addBodyToolStripMenuItem.Text = "Add Body";
             addBodyToolStripMenuItem.Click += addBodyToolStripMenuItem_Click;
             // 
+            // showLegendToolStripMenuItem
+            // 
+            showLegendToolStripMenuItem.Name = "showLegendToolStripMenuItem";
+            showLegendToolStripMenuItem.Size = new Size(90, 20);
+            showLegendToolStripMenuItem.Text = "Show Legend";
+            showLegendToolStripMenuItem.Click += showLegendToolStripMenuItem_Click;
+            // 
             // DateAndTimeLabel
             // 
             DateAndTimeLabel.AutoSize = true;
@@ -143,12 +150,6 @@
             idiotbox.Size = new Size(190, 15);
             idiotbox.TabIndex = 3;
             idiotbox.Text = "You haven't broken anything, yet...";
-            // 
-            // showLegendToolStripMenuItem
-            // 
-            showLegendToolStripMenuItem.Name = "showLegendToolStripMenuItem";
-            showLegendToolStripMenuItem.Size = new Size(90, 20);
-            showLegendToolStripMenuItem.Text = "Show Legend";
             // 
             // SimulationDisplay
             // 
