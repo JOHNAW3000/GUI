@@ -22,8 +22,7 @@
             static DateTime stopdate = startdate.AddDays(1);
             static string startstring = startdate.ToString("yyyy-MM-dd");
             static string stopstring = stopdate.ToString("yyyy-MM-dd");
-
-
+            //
             string start_time = $"START_TIME='{startstring}'";
             string stop_time = $"STOP_TIME='{stopstring}'";
             //

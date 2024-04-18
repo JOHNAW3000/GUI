@@ -93,7 +93,7 @@ namespace GUI
                     size = 5;
                 }
                 else
-                {
+                {   
                     size = 20;
                 }*/
 
@@ -440,7 +440,7 @@ namespace GUI
 
         private void showLegendToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (legend == null)
+            if (legend == null || legend.IsDisposed)
             {
                 legend = new Legend(sim.GetBodies(), this);
             }

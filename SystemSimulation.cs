@@ -88,6 +88,7 @@ namespace GUI
 
                         Vector resultant = planetarysystem.Resultant(i);
 
+                        // Using F = ma
                         Vector acceleration = resultant.Scale(1 / mass);
 
                         //Debug.WriteLine($"Acceleration of {body.Name}");
