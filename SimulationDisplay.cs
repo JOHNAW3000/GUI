@@ -219,8 +219,7 @@ namespace GUI
             DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
             idiotbox.Text = "Loaded Successfully";
 
-            //sim.Run(1, 1, g, this, UpdateUI, uselog, coordcon);
-
+            DrawPlanets(sim.GetBodies());
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -245,7 +244,7 @@ namespace GUI
 
 
                 DateAndTimeLabel.Text = sim.Date.ToString("yyyy-MM-dd");
-
+                DrawPlanets(sim.GetBodies());
             }
         }
 
