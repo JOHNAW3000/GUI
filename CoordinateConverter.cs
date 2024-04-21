@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Configuration;
+using System.Diagnostics;
 
 namespace GUI
 {
@@ -9,10 +10,6 @@ namespace GUI
             // Properties
             int width;
             int height;
-            // Stores the coordinates of each planet to be plotted
-
-
-
 
             public CoordinateConverter(int width, int height)
             {
@@ -24,7 +21,6 @@ namespace GUI
             // Methods
 
             // Outputs coordinate list
-
             public List<Vector> ConvertCoords(List<Vector> positions, bool uselog, float zoomlevel)
             {
                 List<Vector> coordinates;
@@ -43,7 +39,10 @@ namespace GUI
 
 
 
-
+            // This method uses the power rule
+            // It originally used a logarithmic scale,
+            // but after a conversation where my supervisor suggested looking at the power rule I decided to use that
+            // 
             private List<Vector> ConvertCoordsLog(List<Vector> positions, float zoomlevel)
             {
 
@@ -63,6 +62,8 @@ namespace GUI
 
                     if (magnitude != 0)
                     {
+                        // Uses power law scaling
+                        // 
                         //magnitude = Math.Log(magnitude, logbase);
                         magnitude = Math.Pow(magnitude / 6E9, 1f / zoomlevel) * height * 0.9 * 0.5; ///// EXPLAIN //// and fix
 

@@ -4,13 +4,18 @@ namespace GUI
 {
     public partial class BodyInfo : Form
     {
+        // Properties
         private Body body;
         private SimulationDisplay form;
+
+        // Constructor
         public BodyInfo(Body b, SimulationDisplay form)
         {
             InitializeComponent();
+
             this.body = b;
             this.form = form;
+            // initialises text boxes with current values
             nametextbox.Text = b.Name;
             masstextbox.Text = b.Mass.ToString();
             positiontextbox.Text = b.Position.Modulus().ToString();
@@ -29,14 +34,15 @@ namespace GUI
         private void updatebtn_Click(object sender, EventArgs e)
         {
             Body newbody = CreateBody();
-            if (body.Position.Modulus() == 0)
+            // from testing
+            /*if (body.Position.Modulus() == 0)
             {
                 newbody.Position = new Vector(0, 0);
             }
             if (body.Velocity.Modulus() == 0)
             {
                 newbody.Velocity = new Vector(0, 0);
-            }
+            }*/
             form.UpdateBody(body, newbody);
             this.Close();
         }
@@ -50,7 +56,14 @@ namespace GUI
             newpos = newpos.Scale(Convert.ToDouble(positiontextbox.Text));
 
             Body newbody = new Body(nametextbox.Text, body.ID, Convert.ToDouble(masstextbox.Text), body.Radius, newpos, newvel);
-            newbody.Colours = new Appearance(Color.FromName(primarytextbox.Text), Color.FromName(secondarytextbox.Text));
+            if (Color.FromName(primarytextbox.Text).IsKnownColor && Color.FromName(secondarytextbox.Text).IsKnownColor)
+            {
+                newbody.Colours = new Appearance(Color.FromName(primarytextbox.Text), Color.FromName(secondarytextbox.Text));
+            }
+            else
+            {
+                newbody.Colours = body.Colours;
+            }
             newbody.IsStar = body.IsStar;
 
             return newbody;

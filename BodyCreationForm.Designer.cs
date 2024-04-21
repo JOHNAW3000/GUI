@@ -47,7 +47,7 @@
             velocityylabel = new Label();
             velocityytextbox = new TextBox();
             velocitylabel = new Label();
-            label1 = new Label();
+            radiuslabel = new Label();
             radiustextbox = new TextBox();
             SuspendLayout();
             // 
@@ -211,14 +211,14 @@
             velocitylabel.TabIndex = 32;
             velocitylabel.Text = "Speed:";
             // 
-            // label1
+            // radiuslabel
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(12, 62);
-            label1.Name = "label1";
-            label1.Size = new Size(45, 15);
-            label1.TabIndex = 33;
-            label1.Text = "Radius:";
+            radiuslabel.AutoSize = true;
+            radiuslabel.Location = new Point(12, 62);
+            radiuslabel.Name = "radiuslabel";
+            radiuslabel.Size = new Size(70, 15);
+            radiuslabel.TabIndex = 33;
+            radiuslabel.Text = "Radius: /km";
             // 
             // radiustextbox
             // 
@@ -233,7 +233,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(320, 317);
             Controls.Add(radiustextbox);
-            Controls.Add(label1);
+            Controls.Add(radiuslabel);
             Controls.Add(velocitylabel);
             Controls.Add(velocityytextbox);
             Controls.Add(velocityylabel);
@@ -280,7 +280,7 @@
         private Label velocityylabel;
         private TextBox velocityytextbox;
         private Label velocitylabel;
-        private Label label1;
+        private Label radiuslabel;
         private TextBox radiustextbox;
     }
 }

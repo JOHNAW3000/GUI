@@ -7,18 +7,17 @@ namespace GUI
         public class AdjacencyMatrix
         {
             // Properties 
-            private double G = 6.67 * Math.Pow(10, -11);
+            private const double G = 6.67E-11;
             private List<List<Vector>> edges = new List<List<Vector>>();
             private List<Body> bodies = new List<Body>();
 
-            //// Constructor
+            // Constructor
             //public AdjacencyMatrix()
             //{
 
             //}
 
             // Methods
-
             public void ReplaceBody(Body body, int index)
             {
                 this.bodies[index] = body;
@@ -33,16 +32,17 @@ namespace GUI
             {
                 bodies.Add(a);
                 edges = Expand(edges, bodies.Count);
-                //Console.WriteLine($"Edges is {edges.Count} by {edges[0].Count}");
             }
 
-            // Update edges when a body is added
+            // Update edges matrix when a body is added
             private static List<List<Vector>> Expand(List<List<Vector>> edges, int dimensions)
             {
                 Vector defaultvector = new Vector(0, 0);
                 List<Vector> newcolumn = new List<Vector>();
+                // Adds the new column needed for the matrix
                 edges.Add(newcolumn);
 
+                // Fills makes sure every column is full of vectors
                 foreach (List<Vector> column in edges)
                 {
                     while (column.Count < dimensions)
@@ -55,12 +55,10 @@ namespace GUI
             }
 
             // Remove body
-
             public void RemoveBody(Body body)
             {
                 edges = Remove(edges, body);
                 bodies.Remove(body);
-
             }
 
             private List<List<Vector>> Remove(List<List<Vector>> edges, Body body)
@@ -76,7 +74,7 @@ namespace GUI
                 return edges;
             }
 
-            // Update Forces
+            // Updates every force (edge) in the matrix
             public void Update()
             {
                 for (int i = 0; i < bodies.Count; i++)
@@ -89,7 +87,6 @@ namespace GUI
                         }
                         else
                         {
-                            //Console.WriteLine($"bodies.Count: {bodies.Count}, i: {i}, j: {j
                             edges[i][j] = CalculateForce(i, j);
                         }
 
@@ -98,12 +95,14 @@ namespace GUI
 
             }
 
+            // For efficiency, this only updates the forces on a single body
             public void SingleBodyUpdate(int index)
             {
                 for (int columnindex = 0; columnindex < bodies.Count; columnindex++)
                 {
                     if (index == columnindex)
                     {
+                        // makes sure the body has 0 force on itself
                         edges[columnindex][index] = new Vector(0, 0);
                     }
                     else
@@ -117,6 +116,7 @@ namespace GUI
                 }
             }
 
+            // Sums the vector forces on the body to give the acting, resultant force
             public Vector Resultant(int index)
             {
                 Vector resultantforce = new Vector(0, 0);
@@ -131,6 +131,8 @@ namespace GUI
 
             }
 
+            // This method calculates the force on a body using the UNiversal Law of Gravitation (F = Gmm / r2)
+            // rvector, runit and rmod refers to the radius vector, radius unit vector and radius scalar respectively
             private Vector CalculateForce(int i, int j)
             {
                 Body a = bodies[i];
@@ -140,7 +142,6 @@ namespace GUI
                 //Convert to km to m
                 rvector = rvector.Scale(1000);
                 double rmod = rvector.Modulus();
-                //Debug.WriteLine($"Distance between {a.Name} and {b.Name} = {rmod}");
                 double rsquared = Math.Pow(rmod, 2);
                 // Calculate Unit vector of r
                 Vector runit = rvector.Unit();
@@ -151,6 +152,7 @@ namespace GUI
                 return force;
             }
 
+            // Used for debugging
             public void Data()
             {
                 for (int i = 0; i < bodies.Count; i++)

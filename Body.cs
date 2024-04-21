@@ -5,17 +5,16 @@ namespace GUI
     public class Body
     {
         // Properties
-
         private string name;
         private string id;
         private double mass;
         private double radius;
         private Vector position;
         private Vector velocity;
-        private string stats;
+        //private string stats;
         private Appearance colours;
         private bool isstar = false;
-        private OrbitPath orbit;
+        //private OrbitPath orbit;
 
 
         // Constructor
@@ -28,18 +27,15 @@ namespace GUI
             this.radius = radius;
             this.position = position;
             this.velocity = velocity;
-            this.Orbit = new OrbitPath(position);
+            //this.Orbit = new OrbitPath(position);
         }
 
         // Methods
-
-
         public string Name
         {
             get { return name; }
             set { name = value; }
         }
-
         public string ID
         {
             get { return id; }
@@ -56,37 +52,34 @@ namespace GUI
             get { return radius; }
             set { radius = value; }
         }
-
         public Vector Position
         {
             get { return position; }
             set { position = value; }
         }
-
         public Vector Velocity
         {
             get { return velocity; }
             set { velocity = value; }
         }
-
         public Appearance Colours
         {
             get { return colours; }
             set { colours = value; }
         }
-
         public bool IsStar
         {
             get { return isstar; }
             set { isstar = value; }
         }
 
-        public OrbitPath Orbit
+        /*public OrbitPath Orbit
         {
             get { return orbit; }
             set { orbit = value; }
-        }
-
+        }*/
+        
+        // For debugging
         public void Data()
         {
             Debug.WriteLine($"Name: {this.name}");
