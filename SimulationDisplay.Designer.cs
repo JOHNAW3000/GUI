@@ -43,7 +43,7 @@
             DateAndTimeLabel = new Label();
             saveFileDialog1 = new SaveFileDialog();
             openFileDialog1 = new OpenFileDialog();
-            idiotbox = new Label();
+            errorbox = new Label();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -142,14 +142,14 @@
             DateAndTimeLabel.TabIndex = 2;
             DateAndTimeLabel.Text = "Currently outside space and time...";
             // 
-            // idiotbox
+            // errorbox
             // 
-            idiotbox.AutoSize = true;
-            idiotbox.Location = new Point(8, 58);
-            idiotbox.Name = "idiotbox";
-            idiotbox.Size = new Size(190, 15);
-            idiotbox.TabIndex = 3;
-            idiotbox.Text = "You haven't broken anything, yet...";
+            errorbox.AutoSize = true;
+            errorbox.Location = new Point(8, 58);
+            errorbox.Name = "errorbox";
+            errorbox.Size = new Size(190, 15);
+            errorbox.TabIndex = 3;
+            errorbox.Text = "You haven't broken anything, yet...";
             // 
             // SimulationDisplay
             // 
@@ -157,7 +157,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
             ClientSize = new Size(984, 749);
-            Controls.Add(idiotbox);
+            Controls.Add(errorbox);
             Controls.Add(DateAndTimeLabel);
             Controls.Add(menuStrip1);
             ForeColor = Color.Cornsilk;
@@ -180,7 +180,7 @@
         private Label DateAndTimeLabel;
         private SaveFileDialog saveFileDialog1;
         private OpenFileDialog openFileDialog1;
-        private Label idiotbox;
+        private Label errorbox;
         private ToolStripMenuItem stopToolStripMenuItem;
         private ToolStripMenuItem scaleTypeToolStripMenuItem;
         private ToolStripMenuItem logarithmicToolStripMenuItem;

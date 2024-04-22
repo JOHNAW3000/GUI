@@ -20,12 +20,10 @@ namespace GUI
             FormClosed += new FormClosedEventHandler(FormClosing);
         }
 
-        public List<BodyInfo> BodyInfoList
-        {
-            get { return bodyInfoList; }
-            private set { bodyInfoList = value; }
-        }
-
+        /// <summary>
+        /// This refreshes the legend with the latest list of bodies
+        /// </summary>
+        /// <param name="bodies"></param>
         public void Update(List<Body> bodies)
         {
             legendlist.Items.Clear();
@@ -35,6 +33,11 @@ namespace GUI
             }
         }
 
+        /// <summary>
+        /// This triggers when the user selects an item from the legend, and displays the BodyInfo form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void legendlist_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (Body body in bodies)
@@ -49,6 +52,11 @@ namespace GUI
             }
         }
 
+        /// <summary>
+        /// Closes all BodyInfo forms when the legend is closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormClosing(object sender, FormClosedEventArgs e)
         {
             foreach (BodyInfo info in bodyInfoList)

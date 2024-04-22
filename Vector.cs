@@ -76,25 +76,9 @@ namespace GUI
             //Debug.WriteLine($"Mod: {mod}");
         }
 
-
-        public Vector Log(double scalar)
-        {
-            double x = Math.Log(Math.Abs(this.X), scalar);
-            double y = Math.Log(Math.Abs(this.Y), scalar);
-            if (this.X < 0)
-            {
-                x *= -1;
-            }
-            if (this.Y < 0)
-            {
-                y *= -1;
-            }
-            return new Vector(x, y);
-        }
-
         public double AngleBetween(Vector v)
         {
-
+            // Uses cos(theta) = a . b / |a| . |b|
             double scalarproduct = ScalarProduct(this, v);
             double modproduct = this.Modulus() * v.Modulus();
             double result = scalarproduct / modproduct;

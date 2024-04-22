@@ -20,9 +20,10 @@ namespace GUI
             AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
 
             // Creates a list of planets to loop through
-            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Commet"};
             string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"};
 
+            // Testing planets
+            //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Commet"};
             //string[] planets = {"Sun", "Earth", "Moon" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars" };
             //string[] planets = { "Sun", "Mercury", "Venus", "Earth", "Mars", "Saturn", "Uranus", "Neptune", "Pluto" };
@@ -34,6 +35,7 @@ namespace GUI
                 // Creates a body from each API response
                 Body body = api.ParseAPIResponse(planet);
 
+                // Sets the appearance of each planet to an easily distinguishable colour
                 switch (body.Name)
                 {
                     case "Sun":
@@ -79,8 +81,6 @@ namespace GUI
                         break;
                 }
 
-
-
                 // Add to force matrix
                 body.Data();
                 planetarysystem.AddBody(body);
@@ -92,13 +92,19 @@ namespace GUI
             return sim;
 
         }
-
+        /// <summary>
+        /// Loads a JSOn sim file, and parses it into a simulation
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static SystemSimulation LoadSimulation(string path)
         {
             string jsontext = File.ReadAllText(path);
 
             JObject jsoncompletefile = JObject.Parse(jsontext);
+            // List of bodies and their data
             JArray jsonplanets = (JArray)jsoncompletefile["Planets"];
+            // The simulation date
             string jsondate = jsoncompletefile["Date"].ToString();
 
             AdjacencyMatrix planetarysystem = new AdjacencyMatrix();
@@ -118,6 +124,7 @@ namespace GUI
         {
             string jsonfile = sim.SaveSim();
             JObject jsoncomplete = new JObject();
+            // Parses the planets and date separately
             jsoncomplete["Planets"] = JArray.Parse(jsonfile);
             jsoncomplete["Date"] = JsonConvert.SerializeObject(sim.Date);
             File.WriteAllText(path, jsoncomplete.ToString());

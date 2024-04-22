@@ -8,13 +8,19 @@ namespace GUI
         public class CoordinateConverter
         {
             // Properties
-            int width;
-            int height;
+            private int width;
+            private int height;
+            private int screenradius;
+
+            private const double solarsystemradius = 6E9;
 
             public CoordinateConverter(int width, int height)
             {
                 this.width = width;
                 this.height = height;
+
+                int smallestdimension = Math.Min(width, height);
+                screenradius = smallestdimension / 2;
             }
 
 
@@ -37,12 +43,15 @@ namespace GUI
                 return coordinates;
             }
 
-
-
-            // This method uses the power rule
+            /// <summary>
+            /// Uses power law to scale distances
+            /// </summary>
+            /// <param name="positions"> The list of planet positions</param>
+            /// <param name="zoomlevel"> The integer zoom level of the form</param>
+            /// <returns></returns>
+            // This method uses the power law
             // It originally used a logarithmic scale,
             // but after a conversation where my supervisor suggested looking at the power rule I decided to use that
-            // 
             private List<Vector> ConvertCoordsLog(List<Vector> positions, float zoomlevel)
             {
 
@@ -62,10 +71,13 @@ namespace GUI
 
                     if (magnitude != 0)
                     {
+
                         // Uses power law scaling
-                        // 
-                        //magnitude = Math.Log(magnitude, logbase);
-                        magnitude = Math.Pow(magnitude / 6E9, 1f / zoomlevel) * height * 0.9 * 0.5; ///// EXPLAIN //// and fix
+                        // The formula can be seen in detail under the Algorithms section
+                        // Previous method used:
+                        // magnitude = Math.Log(magnitude, logbase);
+                        magnitude = Math.Pow(magnitude / solarsystemradius, 1f / zoomlevel) * screenradius * 0.9; 
+                        // The 0.9 is a scalar so that the drawing takes up 90% of the screen when drawn
 
                         coordinate = direction.Scale(magnitude);
                         coordinate = coordinate.Add(centre);
@@ -77,9 +89,15 @@ namespace GUI
                 return coords;
             }
 
-
+            /// <summary>
+            /// Uses a scalar to scale down distances
+            /// </summary>
+            /// <param name="positions"> The list of planet positions</param>
+            /// <param name="zoomlevel"> The integer zoom level of the form</param>
+            /// <returns></returns>
             private List<Vector> ConvertCoordsScalar(List<Vector> positions, float zoomlevel)
             {
+                // Converts zoom level to a scalar, the lowest being 1:1, highest being 1:1,000,000,000
                 double scalar = Math.Pow(10, -10 + zoomlevel);
 
                 List<Vector> coords = new List<Vector>();
@@ -109,6 +127,7 @@ namespace GUI
             }
 
 
+            // Unused code from the start of implementing Kepler's Laws
             public OrbitPath ConvertOrbit(OrbitPath orbit, bool uselog, int zoomlevel)
             {
 
@@ -119,15 +138,8 @@ namespace GUI
                     orbit.Aphelion, orbit.Perihelion
                 }, uselog, zoomlevel);
 
-
-                // comment 
-                // |        |        |
-                // -------------------
-
                 Vector aphelion = ellipsevertices[0];
                 Vector perihelion = ellipsevertices[1];
-
-                //this is a bodge
 
                 aphelion = aphelion.Add(centre.Scale(-1));
                 perihelion = perihelion.Add(centre.Scale(-1));

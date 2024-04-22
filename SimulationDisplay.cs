@@ -31,7 +31,6 @@ namespace GUI
         public SimulationDisplay()
         {
             InitializeComponent();
-            //DoubleBuffered = true;
             zoomlevel = 3;
             timesteplevel = 4;
 
@@ -72,13 +71,18 @@ namespace GUI
             return positions;
         }
 
+        /// <summary>
+        /// Draws the bodies in a system, and highlights the selected body, if any
+        /// </summary>
+        /// <param name="bodies"></param>
         public void DrawPlanets(List<Body> bodies)
         {
+            // Creates an off screen buffer
             Graphics buffer_g = Graphics.FromImage(buffer);
             buffer_g.Clear(Color.Black);
 
+            // Planet diameter
             int size = 20;
-
 
             List<Vector> positions = GetPositions(bodies);
             List<Vector> coordinates = coordcon.ConvertCoords(positions, uselog, zoomlevel);
@@ -88,28 +92,20 @@ namespace GUI
             {
                 Body body = bodies[bodyindex];
 
-                /*if (body.Name == "Moon")
-                {
-                    size = 5;
-                }
-                else
-                {   
-                    size = 20;
-                }*/
-
                 Vector pos = coordinates[bodyindex];
                 Appearance colours = body.Colours;
                 Pen p = new Pen(colours.Primary, 5);
                 Brush b = new SolidBrush(colours.Secondary);
                 Pen arrowPen = new Pen(colours.Secondary, 3);
 
-
+                //Draws velocity arrow
                 Vector velocity = body.Velocity;
                 float startx = (float)pos.X;
                 float starty = (float)pos.Y;
                 float endx = (float)pos.Add(velocity).X;
                 float endy = (float)pos.Add(velocity).Y;
 
+                // try-catch in case the simulation is so zoomed in that the body is off the buffer
                 try
                 {
                     buffer_g.DrawLine(arrowPen, startx, starty, endx, endy);
@@ -118,9 +114,6 @@ namespace GUI
                     buffer_g.DrawEllipse(p, startx - (size / 2), starty - (size / 2), size, size);
                 }
                 catch { }
-
-
-                //pos.Data();
             }
 
             if (selectedbody != null)
@@ -165,9 +158,11 @@ namespace GUI
                 catch { }
             }
 
+            // Draws the off screen buffer onto the visible one
             g.DrawImage(buffer, 0, 0);
-            //Debug.WriteLine("Drawn");
         }
+
+
         private async void RunBtn_Click(object sender, EventArgs e)
         {
 
@@ -175,11 +170,11 @@ namespace GUI
             {
                 if (sim == null)
                 {
-                    idiotbox.Text = "No simulation loaded!!!";
+                    errorbox.Text = "No simulation loaded!!!";
                 }
                 else
                 {
-                    idiotbox.Text = "All Clear";
+                    errorbox.Text = "All Clear";
                     running = true;
                     DrawPlanets(sim.GetBodies());
 
@@ -190,11 +185,11 @@ namespace GUI
 
         private async Task Running()
         {
-            //int timestep = 3600 * 24;
             DateTime lastupdated = DateTime.Now;
 
             while (running)
             {
+                // Draws 60 times a second
                 double timesincelastupdate = (DateTime.Now - lastupdated).TotalMilliseconds;
 
                 if (timesincelastupdate >= (1000 / 60))
@@ -217,7 +212,7 @@ namespace GUI
             sim = GetLiveSolarSystem();
 
             DateAndTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            idiotbox.Text = "Loaded Successfully";
+            errorbox.Text = "Loaded Successfully";
 
             DrawPlanets(sim.GetBodies());
         }
@@ -237,7 +232,7 @@ namespace GUI
                 }
                 catch (Exception ex)
                 {
-                    idiotbox.Text = "Invalid simulation file!!!";
+                    errorbox.Text = "Invalid simulation file!!!";
                 }
 
 
@@ -252,7 +247,7 @@ namespace GUI
         {
             if (sim == null)
             {
-                idiotbox.Text = "No simulation to save!!!";
+                errorbox.Text = "No simulation to save!!!";
             }
             else
             {
@@ -286,7 +281,11 @@ namespace GUI
             DrawPlanets(sim.GetBodies());
 
         }
-
+        /// <summary>
+        /// Detects if the user has clicked on a planet
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
             selectedbody = null;
@@ -328,6 +327,11 @@ namespace GUI
             selectedbodyinfo.Show();
         }
 
+        /// <summary>
+        /// Detects the user scrolling, and either zooms or changes the timestep
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseWheel(object sender, MouseEventArgs e)
         {
             if (Control.ModifierKeys == Keys.Control)
@@ -389,10 +393,13 @@ namespace GUI
 
         }
 
+        /// <summary>
+        /// Replaces the old body in the simulation with the new one
+        /// </summary>
+        /// <param name="oldbody"></param>
+        /// <param name="newbody"></param>
         public void UpdateBody(Body oldbody, Body newbody)
         {
-            //oldbody.Data();
-            //newbody.Data();
             List<Body> bodies = sim.GetBodies();
             int index = -1;
             int i = 0;
@@ -404,9 +411,7 @@ namespace GUI
                 }
                 i++;
             }
-            //Debug.WriteLine(index);
             sim.PlanetarySystem.ReplaceBody(newbody, index);
-            //Debug.WriteLine(sim.GetBodies().Count);
             SelectedBody = null;
 
             if (legend != null)

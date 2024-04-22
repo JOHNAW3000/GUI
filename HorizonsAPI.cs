@@ -41,6 +41,11 @@
 
             }
 
+            /// <summary>
+            /// Takes the body's name and returns the JPL API response
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
             private string Query(string name)
             {
                 Dictionary<string, string> HorizonsID = new Dictionary<string, string>()
@@ -70,6 +75,11 @@
                 return response;
             }
 
+            /// <summary>
+            /// Takes the API response, parses it and returns the body from the data
+            /// </summary>
+            /// <param name="queryname"> The name of the planet to be queried </param>
+            /// <returns></returns>
             public Body ParseAPIResponse(string queryname)
             {
                 string response = this.Query(queryname);
@@ -86,15 +96,14 @@
 
                 string masspattern = @"Mass,?\s*x?\s*10.(\d+).+?=\s*~?(\d+\.?\d*)";
                 Match massmatch = Regex.Match(response, masspattern);
-                // temp
+                double mass = float.Parse(massmatch.Groups[2].Value) * Math.Pow(10, Convert.ToInt32(massmatch.Groups[1].Value));
+
 
                 string radiuspattern = @"M?m?ean R?r?adius.+?=\s*(\d+\.?\d*?)";
                 Match radiusmatch = Regex.Match(response, radiuspattern);
+                double radius = Convert.ToDouble(radiusmatch.Groups[1].Value);
 
-                double mass = 0;
-                double radius = 0;
-
-                if (queryname == "Commet")
+                /*if (queryname == "Commet")
                 {
                     mass = 1E6;
                 }
@@ -103,9 +112,7 @@
                     mass = float.Parse(massmatch.Groups[2].Value) * Math.Pow(10, Convert.ToInt32(massmatch.Groups[1].Value));
                     radius = Convert.ToDouble(radiusmatch.Groups[1].Value);
 
-                }
-
-
+                }*/
 
                 string positionpattern = @"SOE\s*.*\n\s*?X =(-? ?\d+\.\d+E\+?-?\d+).*?Y =(-? ?\d+\.\d+E\+?-?\d+)";
                 Match positionmatch = Regex.Match(response, positionpattern);

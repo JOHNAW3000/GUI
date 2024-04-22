@@ -10,7 +10,7 @@ namespace GUI
             private AdjacencyMatrix planetarysystem;
             private DateTime date;
 
-            private int timestep = 3600 * 24;
+            private int timestep = 60 * 60;
 
             // Constructor
             public SystemSimulation(AdjacencyMatrix forces, DateTime date)
@@ -53,7 +53,6 @@ namespace GUI
 
             /*public void Run(int timestep, Graphics g, SimulationDisplay form)
             {
-
                 form.DrawStep(planetarysystem.GetBodies());
 
                 this.Step(timestep);
@@ -61,12 +60,11 @@ namespace GUI
                 DateTime datetime = form.GetDate();
                 datetime = datetime.AddSeconds(timestep);
                 form.UpdateLabel(datetime.ToString("yyyy-MM-dd"));
-
-
-                // make this consistent
-                //Thread.Sleep(10);
             }*/
 
+            /// <summary>
+            /// Represents one timestep in the simulation
+            /// </summary>
             public void Step()
             {
 
@@ -77,9 +75,6 @@ namespace GUI
 
                 for (int i = 0; i < bodies.Count; i++)
                 {
-
-                    // Now using Verlet method
-
                     Body body = bodies[i];
                     if (!body.IsStar && body.Mass != 0)
                     {
@@ -91,37 +86,21 @@ namespace GUI
                         // Using F = ma
                         Vector acceleration = resultant.Scale(1 / mass);
 
-                        //Debug.WriteLine($"Acceleration of {body.Name}");
-                        //acceleration.Data();
-
                         Vector position = body.Position;
-                        position = position.Scale(1000);
+                        position = position.Scale(1000); // Converts to m
 
                         Vector velocity = body.Velocity;
-                        velocity = velocity.Scale(1000);
-
-                        //Vector centralbodypos = new Vector(0,0);
-                        //body.Orbit.Update(centralbodypos, position, timestep);
-
+                        velocity = velocity.Scale(1000); // Converts to m
 
                         // Calculate new position
-                        Vector newpos = new Vector(0, 0);
-
-
-                        newpos = deltaPosition(position, velocity, acceleration, timestep);
-
+                        Vector newpos = deltaPosition(position, velocity, acceleration, timestep);
 
                         // Calculate new velocity
-
                         body.Position = newpos;
                         planetarysystem.ReplaceBody(body, i);
-
                         planetarysystem.SingleBodyUpdate(i);
-
                         resultant = PlanetarySystem.Resultant(i);
-                        //resultant.Data();
                         Vector newacceleration = resultant.Scale(1 / mass);
-
                         Vector newvelocity = deltaVelocity(velocity, acceleration, newacceleration, timestep);
 
 
@@ -142,54 +121,35 @@ namespace GUI
 
                 //PlanetarySystem.Data();
                 //converter.ConvertCoordsLog(PlanetarySystem);
-
             }
 
             private static Vector deltaPosition(Vector position, Vector velocity, Vector acceleration, double timestep)
             {
-
-                // Debug.WriteLine("deltaPosition using pos, vel, acc and t:");
-                //position.Data();
-                // velocity.Data();
-                //acceleration.Data();
-                //Debug.WriteLine(timestep);
-
+                // x = vt
                 Vector displacement = velocity.Scale(timestep);
 
+                // 1/2 at^2
                 Vector AccTimeSquared = acceleration.Scale(0.5 * timestep * timestep);
 
+                // x = vt + 1/2 at^2
                 Vector deltaP = displacement.Add(AccTimeSquared);
                 Vector newpos = position.Add(deltaP);
 
-                //Debug.WriteLine("Pos");
-                //position.Data();
-
-                //Debug.WriteLine("Newpos");
-                //newpos.Data();
-
-                newpos = newpos.Scale(0.001);
+                newpos = newpos.Scale(0.001); // Converts to km
                 return newpos;
             }
 
             private static Vector deltaVelocity(Vector velocity, Vector acceleration, Vector newacceleration, double timestep)
             {
-
-                // Debug.WriteLine("Old acc, new acc");
-                //acceleration.Data();
-                // newacceleration.Data();
-
                 Vector newvelocity = velocity;
-
-                //Debug.WriteLine("Newacc:");
-                //newacceleration.Data();
 
                 acceleration = acceleration.Add(newacceleration);
                 acceleration = acceleration.Scale(0.5 * timestep);
 
+                // v(n+1) = v(n) + at
                 newvelocity = newvelocity.Add(acceleration);
-                //Debug.WriteLine("newvel:");
-                //newvelocity.Data();
-                newvelocity = newvelocity.Scale(0.001);
+
+                newvelocity = newvelocity.Scale(0.001); // Converts to km
                 return newvelocity;
             }
 
